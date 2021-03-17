@@ -42,7 +42,7 @@
 
    Activate the virtual environment
 
-   POSIX (Linux/Mac): `source snake-game/bin/activate`
+   POSIX (Linux/macOS): `source snake-game/bin/activate`
 
    Windows (cmd.exe): `snake-game\Scripts\activate.bat`
 
