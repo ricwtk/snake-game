@@ -62,6 +62,10 @@
 1. Activate the environment if it is not activated yet.
    
 2. Change into the `app` directory.
+
+   ```
+   cd app
+   ```
    
 3. Run the server with:
 
