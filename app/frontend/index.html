@@ -8,17 +8,32 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 </head>
 <body>
-  <div id="app">
-    
+  <div id="app" class="h-screen w-screen flex divide-x p-2">
+    <div class="flex-1 h-full p-5">
+      <svg>
+
+      </svg>
+    </div>
+    <div class="flex-none w-1/5 h-full flex flex-col divide-y p-2 item-stretch">
+      <!-- points -->
+      <div class="w-full flex-none flex flex-col">
+        <div class="">Accummulated points</div>
+        <div class="text-4xl text-center p-1">{{ accPoints }}</div>
+      </div>
+      <!-- settings and controls -->
+      <div class="w-full flex-1 overscroll-contain overflow-auto flex flex-col">
+        <div>test test</div>
+
+      </div>
+      <!-- log -->
+      <div class="w-full flex-1 overscroll-contain overflow-auto divide-y flex flex-col">
+        <div v-for="(log,logidx) in logs" :key="logidx" class="p-1">
+          {{ log }}
+        </div>
+      </div>
+    </div>
   </div>
 
-  <script>
-    var vm = new Vue({
-      el: "app",
-      data: {
-
-      }
-    });
-  </script>
+  <script src="./frontend/index.js"></script>
 </body>
 </html>
