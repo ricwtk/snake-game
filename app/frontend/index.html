@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link href='https://css.gg/css' rel='stylesheet'>
 </head>
 <body>
   <div id="app" class="h-screen w-screen flex divide-x p-2">
@@ -17,16 +19,74 @@
     <div class="flex-none w-1/5 h-full flex flex-col divide-y p-2 item-stretch">
       <!-- points -->
       <div class="w-full flex-none flex flex-col">
-        <div class="">Accummulated points</div>
-        <div class="text-4xl text-center p-1">{{ accPoints }}</div>
+        <div class="text-gray-500 py-1">Accummulated points</div>
+        <div class="text-4xl text-center">{{ accPoints }}</div>
       </div>
       <!-- settings and controls -->
       <div class="w-full flex-1 overscroll-contain overflow-auto flex flex-col">
-        <div>test test</div>
-
+        <div class="text-gray-500 py-1">Controls</div>
+        <button-with-label 
+          :icon="controls.manual ? 'ri-user-line' : 'ri-macbook-line'"
+          :label="controls.manual ? 'Human' : 'Agent'"
+          @click="controls.manual=!controls.manual">
+        </button-with-label>
+        <select label="Choose player" class="border p-2" v-model="selectedPlayer" :disabled="controls.manual">
+          <option v-for="player,i in playerList" :key="i" :value="player.value">{{ player.label }}</option>
+        </select>
+        <button-with-label 
+          :icon="controls.play ? 'ri-pause-line' : 'ri-play-line'"
+          :label="controls.play ? 'Playing' : 'Paused'"
+          @click="controls.play=!controls.play">
+        </button-with-label>
+        <button-with-label 
+          icon="ri-restart-line"
+          label="Reset"
+          @click="reset">
+        </button-with-label>
+        <button-with-label 
+          :icon="controls.stepping ? 'ri-arrow-right-s-line' : 'ri-speed-line'"
+          :label="controls.stepping ? 'Step-by-step' : 'Automatic progression'"
+          @click="controls.stepping=!controls.stepping">
+        </button-with-label>
+        <text-button class="p-1" :class="controls.stepping ? '' : 'text-gray-300'" :disabled="!controls.stepping" @click="nextStep">Next step</text-button>
+        <button-with-label 
+          icon="ri-organization-chart"
+          label="Show search trees"
+          @click="showtrees">
+        </button-with-label>
+        
+      </div>
+      <!-- settings -->
+      <div class="w-full flex-1 overscroll-contain overflow-auto flex flex-col relative">
+        <div class="text-gray-500 py-1">Game Settings</div>
+        <div class="absolute bottom-0 w-full flex flex-row py-1" v-if="settingsModified">
+          <div class="text-gray-600 flex-1">Save modified settings?</div>
+          <button-only icon="ri-check-line" class="flex-none mr-1 w-8" @click="saveSettings"></button-only>
+          <button-only icon="ri-close-line" class="flex-none text-black w-8" @click="discardSettings"></button-only>
+        </div>
+        <div>Maze size</div>
+        <div class="flex flex-row">
+          <input type="number" v-model.number="settings.displayed.mazeRow" class="flex-1 w-0 border" min="1">
+          <div class="flex-none mx-2">&times;</div>
+          <input type="number" v-model.number="settings.displayed.mazeCol" class="flex-1 w-0 border" min="1">
+        </div>
+        <button-with-label 
+          :icon="settings.displayed.staticLength ? 'ri-separator' : 'ri-bar-chart-horizontal-line'"
+          :label="settings.displayed.staticLength ? 'Fixed snake length' : 'Dynamic snake length'"
+          @click="settings.displayed.staticLength=!settings.displayed.staticLength">
+        </button-with-label>
+        <div>Starting snake length</div>
+        <div class="flex flex-row">
+          <input type="number" v-model.number="settings.displayed.startLength" class="flex-1 w-0 border" min="1">
+        </div>
+        <div>Food number</div>
+        <div class="flex flex-row">
+          <input type="number" v-model.number="settings.displayed.foodNumber" class="flex-1 w-0 border" min="1">
+        </div>
       </div>
       <!-- log -->
       <div class="w-full flex-1 overscroll-contain overflow-auto divide-y flex flex-col">
+        <div class="text-gray-500 py-1">Logs</div>
         <div v-for="(log,logidx) in logs" :key="logidx" class="p-1">
           {{ log }}
         </div>
@@ -34,6 +94,26 @@
     </div>
   </div>
 
+  <template id="button-only">
+    <button class="border flex flex-row justify-center items-center" @click="$emit('click')">
+      <span :class="icon"></span>
+    </button>
+  </template>
+
+  <template id="text-button">
+    <button class="border flex flex-row justify-center items-center" @click="$emit('click')">
+      <slot></slot>
+    </button>
+  </template>
+
+  <template id="button-with-label">
+    <div class="flex flex-row items-center p-1 h-10">
+      <button class="flex-none w-10 flex flex-row justify-center h-full items-center border" @click="$emit('click')">
+        <span :class="icon"></span>
+      </button>
+      <div class="flex-1 pl-1">{{ label }}</div>
+    </div>
+  </template>
   <script src="./frontend/index.js"></script>
 </body>
 </html>
