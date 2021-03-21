@@ -1,6 +1,7 @@
 var vm = new Vue({
   el: "#app",
   data: {
+    showControls: false,
     controls: {
       play: false,
       manual: true,
