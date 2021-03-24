@@ -20,7 +20,7 @@
    conda env create -f environment.yml
    ```
 
-   | &#8505; The `environment.yml` was created with `conda env export > environment.yml` |
+   | &#8505; The `environment.yml` was created with `conda env export --from-history > environment.yml` |
    | --- |
 
    | &#9888; If the command `conda` cannot be found, you can either add the anaconda binaries folder to system path, or open the terminal from anaconda navigator by clicking the triangle icon next to the `base` environment |
