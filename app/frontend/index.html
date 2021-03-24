@@ -14,8 +14,17 @@
     .origin-top { transform-origin: top; }
     .origin-bottom { transform-origin: bottom; }
     .maze-pad { fill-opacity: 10%; }
-    .snake-food { fill: #10B981; }
-    .snake { fill: #EC4899; }
+    .snake-food { fill: #10B981; } 
+    .snake-10 { fill: #FDF2F8; }
+    .snake-20 { fill: #FCE7F3; }
+    .snake-30 { fill: #FBCFE8; }
+    .snake-40 { fill: #F9A8D4; }
+    .snake-50 { fill: #F472B6; }
+    .snake-60 { fill: #EC4899; }
+    .snake-70 { fill: #DB2777; }
+    .snake-80 { fill: #BE185D; }
+    .snake-90 { fill: #9D174D; }
+    .snake-100 { fill: #831843; }
   </style>
 </head>
 <body>
@@ -24,7 +33,8 @@
       <svg style="width:100%;height:100%" :view-box.camel="mazeViewBox">
         <rect v-for="loc in mazePadLoc" :x="loc[0]" :y="loc[1]" :width="mazeSettings.unit" :height="mazeSettings.unit" class="maze-pad"></rect>
         <circle v-for="loc in foodLocations" :cx="getCoord(loc[0])" :cy="getCoord(loc[1])" r="10" class="snake-food"></circle>
-        <circle v-for="loc in snakeLocations" :cx="getCoord(loc[0])" :cy="getCoord(loc[1])" r="10" class="snake"></circle>
+        
+        <circle v-for="(loc,i) in snakeLocations" :cx="getCoord(loc[0])" :cy="getCoord(loc[1])" r="10" :class="`snake-${snakeColors[i]}`"></circle>
       </svg>
     </div>
     <div class="flex-none w-1/4 h-full flex flex-col p-2 item-stretch">
