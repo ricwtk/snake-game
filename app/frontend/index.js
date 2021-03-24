@@ -73,10 +73,14 @@ var vm = new Vue({
   },
   mounted: function () {
     this.settings.saved = Object.assign({}, this.settings.saved, this.settings.displayed);
-    this.setSnakeInitialLocations();
-    [...Array(this.settings.saved.foodNumber).keys()].forEach(() => this.generateFoodLocation());
+    this.initialiseGame();
   },
   methods: {
+    initialiseGame: function () {
+      this.setSnakeInitialLocations();
+      this.foodLocations.splice(0, this.foodLocations.length);
+      [...Array(this.settings.saved.foodNumber).keys()].forEach(() => this.generateFoodLocation());
+    },
     setSnakeInitialLocations: function () {
       this.snakeLocations.splice(0, this.snakeLocations.length);
       this.snakeLocations.push([0, Math.floor(this.settings.saved.mazeRow/2)]);
@@ -149,7 +153,10 @@ var vm = new Vue({
     showtrees: function () {
       console.log("showing search trees");
     },
-    saveSettings: function () { this.settings.saved = Object.assign({}, this.settings.saved, this.settings.displayed); },
+    saveSettings: function () { 
+      this.settings.saved = Object.assign({}, this.settings.saved, this.settings.displayed); 
+      this.initialiseGame();
+    },
     discardSettings: function () { this.settings.displayed = Object.assign({}, this.settings.displayed, this.settings.saved); },
     nextStep: function () {
       console.log("next step");
