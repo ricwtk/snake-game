@@ -177,22 +177,37 @@ var vm = new Vue({
     },
     moveSnakeByKeyboard: function (key) {
       let keys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
-      let deltas = [[0,-1], [0,1], [-1,0], [1,0]];
-      let nextLoc = this.snakeLocations[0].map((sl,i) => sl+deltas[keys.indexOf(key)][i]);
-      if (nextLoc[0] > -1 && nextLoc[0] < this.settings.saved.mazeCol && nextLoc[1] > -1 && nextLoc[1] < this.settings.saved.mazeRow) {
-        let strFoodLocs = this.foodLocations.map(x => JSON.stringify(x));
-        let strNextLoc = JSON.stringify(nextLoc);
-        if (strFoodLocs.includes(strNextLoc)) {
-          this.foodLocations.splice(strFoodLocs.indexOf(strNextLoc), 1);
-          this.snakeLength += 1;
-          [...Array(this.settings.saved.foodNumber-this.foodLocations.length).keys()].forEach(() => this.generateFoodLocation());
-          this.logs.push("Yay! Just ate a food!");
-        }
-        this.snakeLocations.splice(0, 0, nextLoc);
-        this.snakeLocations.splice(this.snakeLength, this.snakeLocations.length - this.snakeLength);
+      let dirs = ["n", "s", "w", "e"];
+      let notDir = ["s", "n", "e", "w"]; // direction of index i is not permitted if current direction is index i of dirs
+
+      let nextDir = dirs[keys.indexOf(key)];
+      
+      if (nextDir == notDir[dirs.indexOf(this.moveDir)]) {
+        this.logs.push("Direction unchanged");
       } else {
-        this.logs.push("hit a wall");
+        this.moveDir = nextDir;
+        this.logs.push(`Direction changed to ${this.moveDir}`);
       }
+      
+      
+
+
+      // let deltas = [[0,-1], [0,1], [-1,0], [1,0]];
+      // let nextLoc = this.snakeLocations[0].map((sl,i) => sl+deltas[keys.indexOf(key)][i]);
+      // if (nextLoc[0] > -1 && nextLoc[0] < this.settings.saved.mazeCol && nextLoc[1] > -1 && nextLoc[1] < this.settings.saved.mazeRow) {
+      //   let strFoodLocs = this.foodLocations.map(x => JSON.stringify(x));
+      //   let strNextLoc = JSON.stringify(nextLoc);
+      //   if (strFoodLocs.includes(strNextLoc)) {
+      //     this.foodLocations.splice(strFoodLocs.indexOf(strNextLoc), 1);
+      //     this.snakeLength += 1;
+      //     [...Array(this.settings.saved.foodNumber-this.foodLocations.length).keys()].forEach(() => this.generateFoodLocation());
+      //     this.logs.push("Yay! Just ate a food!");
+      //   }
+      //   this.snakeLocations.splice(0, 0, nextLoc);
+      //   this.snakeLocations.splice(this.snakeLength, this.snakeLocations.length - this.snakeLength);
+      // } else {
+      //   this.logs.push("hit a wall");
+      // }
     }
   }
 });
