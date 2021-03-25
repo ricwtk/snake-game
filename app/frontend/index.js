@@ -226,6 +226,7 @@ var vm = new Vue({
           if (!this.settings.saved.staticLength) this.snakeLength += 1;
           [...Array(this.settings.saved.foodNumber-this.foodLocations.length).keys()].forEach(() => this.generateFoodLocation());
           this.logs.push("Yay! Just ate a food!");
+          this.accPoints += 1;
         }
         this.snakeLocations.splice(0, 0, nextLoc);
         this.snakeLocations.splice(this.snakeLength, this.snakeLocations.length - this.snakeLength);
