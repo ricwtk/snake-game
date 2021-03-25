@@ -49,6 +49,13 @@
         <i :class="showControls ? 'ri-arrow-down-s-line' : 'ri-arrow-left-s-line'"></i>
       </div>
       <div class="w-full overscroll-contain overflow-auto flex flex-col border-b transition-all origin-top" :class="showControls ? 'flex-1 expanded-y' : 'flex-0 h-0 collapsed-y'">
+        <!-- playing overlay -->
+        <div class="absolute top-0 h-full w-full flex flex-row p-1 bg-gray-500 bg-opacity-70 justify-center items-center" v-if="controls.play" @click="controls.play = false">
+          <!-- <button-only icon="ri-pause-line" class="h-1/2 w-1/2 bg-gray-500 border-gray-500 text-white" @click="controls.play = false"></button-only> -->
+          <i class="absolute ri-pause-line"></i>
+          <i class="absolute ri-loader-5-line animate-spin text-7xl"></i>
+        </div>
+        <!-- control buttons -->
         <button-with-label 
           :icon="controls.manual ? 'ri-user-line' : 'ri-skull-2-line'"
           :label="controls.manual ? 'Human' : 'Agent'"
@@ -75,7 +82,7 @@
         <text-button v-if="!controls.manual" class="mx-1 p-1 mb-1" :class="controls.stepping ? '' : 'text-gray-300'" :disabled="!controls.stepping" @click="nextStep">Next step</text-button>
         <div class="pt-1 mx-1">{{ controls.manual ? 'Moving' : 'Animation' }} speed</div>
         <div class="flex flex-row pb-1">
-          <input type="range" class="flex-1 mx-1 p-1" />
+          <input type="range" class="flex-1 mx-1 p-1" v-model="interval.current" min="0" :max="interval.max"/>
         </div>
         <button-with-label v-if="!controls.manual"
           icon="ri-organization-chart"

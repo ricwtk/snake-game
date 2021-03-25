@@ -32,6 +32,11 @@ var vm = new Vue({
     }],
     selectedPlayer: "",
     snakeLength: 0,
+    interval: {
+      current: 0,
+      max: 10,
+      id: null
+    }
   },
   computed: {
     settingsModified: function () {
