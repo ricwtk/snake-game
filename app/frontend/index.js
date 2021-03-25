@@ -23,19 +23,14 @@ var vm = new Vue({
     },
     foodLocations: [],
     snakeLocations: [], // head to tail
-    logs: [
-      "log test log test log test log test log test log test log test ",
-      "log test",
-      "log test",
-      "log test",
-      "log test",
-    ],
+    logs: [],
     accPoints: 0,
     playerList: [{
       value: "",
       label: ""
     }],
     selectedPlayer: "",
+    snakeLength: 0,
   },
   computed: {
     settingsModified: function () {
@@ -77,12 +72,23 @@ var vm = new Vue({
   mounted: function () {
     this.settings.saved = Object.assign({}, this.settings.saved, this.settings.displayed);
     this.initialiseGame();
+    document.onkeydown = (e) => {
+      if (e.target.tagName == "INPUT") {}
+      else {
+        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+          this.moveSnakeByKeyboard(e.key);
+        } else if (["p"].includes(e.key.toLowerCase())) {
+          this.keyboardcontrol(e.key.toLowerCase());
+        }
+      }
+    }
   },
   methods: {
     initialiseGame: function () {
       this.setSnakeInitialLocations();
       this.foodLocations.splice(0, this.foodLocations.length);
       [...Array(this.settings.saved.foodNumber).keys()].forEach(() => this.generateFoodLocation());
+      this.snakeLength = this.settings.saved.startLength;
     },
     setSnakeInitialLocations: function () {
       this.snakeLocations.splice(0, this.snakeLocations.length);
@@ -163,6 +169,25 @@ var vm = new Vue({
     discardSettings: function () { this.settings.displayed = Object.assign({}, this.settings.displayed, this.settings.saved); },
     nextStep: function () {
       console.log("next step");
+    },
+    moveSnakeByKeyboard: function (key) {
+      let keys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+      let deltas = [[0,-1], [0,1], [-1,0], [1,0]];
+      let nextLoc = this.snakeLocations[0].map((sl,i) => sl+deltas[keys.indexOf(key)][i]);
+      if (nextLoc[0] > -1 && nextLoc[0] < this.settings.saved.mazeCol && nextLoc[1] > -1 && nextLoc[1] < this.settings.saved.mazeRow) {
+        let strFoodLocs = this.foodLocations.map(x => JSON.stringify(x));
+        let strNextLoc = JSON.stringify(nextLoc);
+        if (strFoodLocs.includes(strNextLoc)) {
+          this.foodLocations.splice(strFoodLocs.indexOf(strNextLoc), 1);
+          this.snakeLength += 1;
+          [...Array(this.settings.saved.foodNumber-this.foodLocations.length).keys()].forEach(() => this.generateFoodLocation());
+          this.logs.push("Yay! Just ate a food!");
+        }
+        this.snakeLocations.splice(0, 0, nextLoc);
+        this.snakeLocations.splice(this.snakeLength, this.snakeLocations.length - this.snakeLength);
+      } else {
+        this.logs.push("hit a wall");
+      }
     }
   }
 });
