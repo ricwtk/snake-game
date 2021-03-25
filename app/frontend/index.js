@@ -23,6 +23,7 @@ var vm = new Vue({
     },
     foodLocations: [],
     snakeLocations: [], // head to tail
+    moveDir: "e", // 'n' 's' 'w' 'e'
     logs: [],
     accPoints: 0,
     playerList: [{
@@ -72,14 +73,14 @@ var vm = new Vue({
   mounted: function () {
     this.settings.saved = Object.assign({}, this.settings.saved, this.settings.displayed);
     this.initialiseGame();
-    document.onkeydown = (e) => {
-      if (this.controls.manual && this.controls.play) {
-        if (e.target.tagName !== "INPUT") {
-          if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+    document.onkeydown = (e) => {      
+      if (e.target.tagName !== "INPUT") {
+        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+          if (this.controls.manual && this.controls.play) {
             this.moveSnakeByKeyboard(e.key);
-          } else if (["p"].includes(e.key.toLowerCase())) {
-            this.keyboardcontrol(e.key.toLowerCase());
           }
+        } else if (["p"].includes(e.key.toLowerCase())) {
+          this.keyboardControl(e.key.toLowerCase());
         }
       }
     }
@@ -168,6 +169,11 @@ var vm = new Vue({
     discardSettings: function () { this.settings.displayed = Object.assign({}, this.settings.displayed, this.settings.saved); },
     nextStep: function () {
       console.log("next step");
+    },
+    keyboardControl: function (key) {
+      if (key == "p") {
+        this.controls.play = !this.controls.play;
+      }
     },
     moveSnakeByKeyboard: function (key) {
       let keys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
