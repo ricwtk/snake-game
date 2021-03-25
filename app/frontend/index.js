@@ -73,12 +73,13 @@ var vm = new Vue({
     this.settings.saved = Object.assign({}, this.settings.saved, this.settings.displayed);
     this.initialiseGame();
     document.onkeydown = (e) => {
-      if (e.target.tagName == "INPUT") {}
-      else {
-        if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
-          this.moveSnakeByKeyboard(e.key);
-        } else if (["p"].includes(e.key.toLowerCase())) {
-          this.keyboardcontrol(e.key.toLowerCase());
+      if (this.controls.manual && this.controls.play) {
+        if (e.target.tagName !== "INPUT") {
+          if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+            this.moveSnakeByKeyboard(e.key);
+          } else if (["p"].includes(e.key.toLowerCase())) {
+            this.keyboardcontrol(e.key.toLowerCase());
+          }
         }
       }
     }
