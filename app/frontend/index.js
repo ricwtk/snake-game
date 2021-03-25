@@ -202,15 +202,17 @@ var vm = new Vue({
       let notDir = ["s", "n", "e", "w"]; // direction of index i is not permitted if current direction is index i of dirs
 
       let nextDir = dirs[keys.indexOf(key)];
-      
-      if (nextDir == notDir[dirs.indexOf(this.moveDir)]) {
+      let newDirInfeasible = this.snakeLength > 1 && nextDir == notDir[dirs.indexOf(this.moveDir)];      
+      if (newDirInfeasible) {
+        this.logs.push("Invalid direction");
+      } else if (nextDir == this.moveDir) {
         this.logs.push("Direction unchanged");
       } else {
         this.moveDir = nextDir;
         this.logs.push(`Direction changed to ${this.moveDir}`);
       } 
 
-      if (this.controls.interval.current == 0) {
+      if (this.controls.interval.current == 0 &&  !newDirInfeasible) {
         this.moveSnake();
       }
     },
