@@ -80,9 +80,9 @@
           @click="controls.stepping=!controls.stepping">
         </button-with-label>
         <text-button v-if="!controls.manual" class="mx-1 p-1 mb-1" :class="controls.stepping ? '' : 'text-gray-300'" :disabled="!controls.stepping" @click="nextStep">Next step</text-button>
-        <div class="pt-1 mx-1">{{ controls.manual ? 'Moving' : 'Animation' }} speed</div>
+        <div class="pt-1 mx-1">{{ controls.manual ? 'Moving' : 'Animation' }} speed: <span class="font-bold">{{ controls.interval.current }}</span> step per second</div>
         <div class="flex flex-row pb-1">
-          <input type="range" class="flex-1 mx-1 p-1" v-model="interval.current" min="0" :max="interval.max"/>
+          <input type="range" class="flex-1 mx-1 p-1" v-model="controls.interval.current" min="0" :max="controls.interval.max"/>
         </div>
         <button-with-label v-if="!controls.manual"
           icon="ri-organization-chart"

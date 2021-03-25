@@ -5,7 +5,12 @@ var vm = new Vue({
     controls: {
       play: false,
       manual: true,
-      stepping: true
+      stepping: true,
+      interval: {
+        current: 0,
+        max: 10,
+        id: null
+      }
     },
     settings: {
       displayed: {
@@ -32,11 +37,6 @@ var vm = new Vue({
     }],
     selectedPlayer: "",
     snakeLength: 0,
-    interval: {
-      current: 0,
-      max: 10,
-      id: null
-    }
   },
   computed: {
     settingsModified: function () {
@@ -87,6 +87,21 @@ var vm = new Vue({
         } else if (["p"].includes(e.key.toLowerCase())) {
           this.keyboardControl(e.key.toLowerCase());
         }
+      }
+    }
+  },
+  watch: {
+    "controls.play": function (newplay, oldplay) {
+      if (newplay) {
+        this.logs.push("Game started");
+        if (this.controls.interval.current > 0) {
+          this.controls.interval.id = setInterval(this.moveSnake, 1000/this.controls.interval.current);
+        }
+      }
+      else {
+        this.logs.push("Game is paused");
+        if (this.controls.interval.id) clearInterval(this.controls.interval.id);
+        this.controls.interval.id = null;
       }
     }
   },
@@ -192,27 +207,30 @@ var vm = new Vue({
       } else {
         this.moveDir = nextDir;
         this.logs.push(`Direction changed to ${this.moveDir}`);
+      } 
+
+      if (this.controls.interval.current == 0) {
+        this.moveSnake();
       }
-      
-      
-
-
-      // let deltas = [[0,-1], [0,1], [-1,0], [1,0]];
-      // let nextLoc = this.snakeLocations[0].map((sl,i) => sl+deltas[keys.indexOf(key)][i]);
-      // if (nextLoc[0] > -1 && nextLoc[0] < this.settings.saved.mazeCol && nextLoc[1] > -1 && nextLoc[1] < this.settings.saved.mazeRow) {
-      //   let strFoodLocs = this.foodLocations.map(x => JSON.stringify(x));
-      //   let strNextLoc = JSON.stringify(nextLoc);
-      //   if (strFoodLocs.includes(strNextLoc)) {
-      //     this.foodLocations.splice(strFoodLocs.indexOf(strNextLoc), 1);
-      //     this.snakeLength += 1;
-      //     [...Array(this.settings.saved.foodNumber-this.foodLocations.length).keys()].forEach(() => this.generateFoodLocation());
-      //     this.logs.push("Yay! Just ate a food!");
-      //   }
-      //   this.snakeLocations.splice(0, 0, nextLoc);
-      //   this.snakeLocations.splice(this.snakeLength, this.snakeLocations.length - this.snakeLength);
-      // } else {
-      //   this.logs.push("hit a wall");
-      // }
+    },
+    moveSnake: function () {
+      let dirs = ["n", "s", "w", "e"];
+      let deltas = [[0,-1], [0,1], [-1,0], [1,0]];
+      let nextLoc = this.snakeLocations[0].map((sl,i) => sl+deltas[dirs.indexOf(this.moveDir)][i]);
+      if (nextLoc[0] > -1 && nextLoc[0] < this.settings.saved.mazeCol && nextLoc[1] > -1 && nextLoc[1] < this.settings.saved.mazeRow) {
+        let strFoodLocs = this.foodLocations.map(x => JSON.stringify(x));
+        let strNextLoc = JSON.stringify(nextLoc);
+        if (strFoodLocs.includes(strNextLoc)) {
+          this.foodLocations.splice(strFoodLocs.indexOf(strNextLoc), 1);
+          this.snakeLength += 1;
+          [...Array(this.settings.saved.foodNumber-this.foodLocations.length).keys()].forEach(() => this.generateFoodLocation());
+          this.logs.push("Yay! Just ate a food!");
+        }
+        this.snakeLocations.splice(0, 0, nextLoc);
+        this.snakeLocations.splice(this.snakeLength, this.snakeLocations.length - this.snakeLength);
+      } else {
+        this.logs.push("hit a wall");
+      }
     }
   }
 });
