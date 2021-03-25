@@ -123,9 +123,13 @@
         </div>
       </div>
       <!-- log -->
+      <div class="w-full flex-none text-gray-100 p-1 flex flex-row bg-gray-500">
+        <span class="flex-1">Logs</span>
+        <button class="ri-chat-delete-line" @click="logs.splice(0,logs.length)"></button>
+        <button class="ml-2" :class="showLogs ? 'ri-eye-off-line' : 'ri-eye-line'" @click="showLogs=!showLogs"></button>
+      </div>
       <div class="w-full flex-1 overscroll-contain overflow-auto divide-y flex flex-col">
-        <div class="text-gray-100 p-1 bg-gray-500">Logs</div>
-        <div v-for="(log,logidx) in logs" :key="logidx" class="p-1">
+        <div v-for="(log,logidx) in logs" :key="logidx" class="p-1" v-if="showLogs">
           {{ log }}
         </div>
       </div>

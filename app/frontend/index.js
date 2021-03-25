@@ -30,6 +30,7 @@ var vm = new Vue({
     snakeLocations: [], // head to tail
     moveDir: "e", // 'n' 's' 'w' 'e'
     logs: [],
+    showLogs: true,
     accPoints: 0,
     playerList: [{
       value: "",
