@@ -1,7 +1,7 @@
 var vm = new Vue({
   el: "#app",
   data: {
-    showControls: false,
+    showControls: true,
     controls: {
       play: false,
       manual: true,
@@ -85,6 +85,7 @@ var vm = new Vue({
   },
   methods: {
     initialiseGame: function () {
+      this.controls.play = false;
       this.setSnakeInitialLocations();
       this.foodLocations.splice(0, this.foodLocations.length);
       [...Array(this.settings.saved.foodNumber).keys()].forEach(() => this.generateFoodLocation());
@@ -155,9 +156,6 @@ var vm = new Vue({
     },
     getCoord: function (idx) {
       return this.mazeSettings.unit/2 + idx * this.mazeSettings.unit + Math.max(idx+1,0) * this.mazeSettings.gap;
-    },
-    reset: function () {
-      console.log("resetting");
     },
     showtrees: function () {
       console.log("showing search trees");
