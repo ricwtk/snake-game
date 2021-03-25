@@ -16,7 +16,7 @@ var vm = new Vue({
       displayed: {
         mazeRow: 10,
         mazeCol: 10,
-        staticLength: true,
+        staticLength: false,
         startLength: 1,
         foodNumber: 2
       },
@@ -118,7 +118,7 @@ var vm = new Vue({
       this.snakeLocations.splice(0, this.snakeLocations.length);
       this.snakeLocations.push([0, Math.floor(this.settings.saved.mazeRow/2)]);
       let grow = "tail"; // "head" "tail"
-      let growDir = "d"; // "u" "d" "l" "r"
+      let growDir = "s"; // "n" "s" "w" "e"
       while (this.snakeLocations.length < Math.min(this.settings.saved.startLength, this.settings.saved.mazeRow * this.settings.saved.mazeCol - this.settings.saved.foodNumber)) {
         let loc = {
           head: this.snakeLocations[0],
@@ -128,12 +128,12 @@ var vm = new Vue({
         // if nextloc is outside of maze
         while ( [-1, this.settings.saved.mazeCol].includes(nextLoc[0]) || [-1, this.settings.saved.mazeRow].includes(nextLoc[1]) ) {
           if ( [-1, this.settings.saved.mazeCol].includes(nextLoc[0]) ) { // if row is filled
-            if (grow == "head") { growDir = "u"; }
-            else { growDir = "d"; }
+            if (grow == "head") { growDir = "n"; }
+            else { growDir = "s"; }
           }
           if ( nextLoc[1] == this.settings.saved.mazeRow ) { // if bottom all filled
             grow = "head";
-            growDir = "r";
+            growDir = "e";
           }
           if ( nextLoc[1] == -1 ) { // if all is filled
             nextLoc = [loc[grow][0], loc[grow][1]];
@@ -147,14 +147,14 @@ var vm = new Vue({
         else { this.snakeLocations.push(nextLoc); }
 
         // identify next growing direction
-        if ( ["d", "u"].includes(growDir) ) {
-          if (nextLoc[0] == 0) { growDir = "r"; }
-          else { growDir = "l"; }
+        if ( ["s", "n"].includes(growDir) ) {
+          if (nextLoc[0] == 0) { growDir = "e"; }
+          else { growDir = "w"; }
         }
       }
     },
     getNewLocByDir: function (oldLoc, dir) {
-      let allDir = ["u", "d", "l", "r"];
+      let allDir = ["n", "s", "w", "e"];
       let operations = [
         [0, -1],
         [0, +1],
@@ -217,15 +217,13 @@ var vm = new Vue({
       }
     },
     moveSnake: function () {
-      let dirs = ["n", "s", "w", "e"];
-      let deltas = [[0,-1], [0,1], [-1,0], [1,0]];
-      let nextLoc = this.snakeLocations[0].map((sl,i) => sl+deltas[dirs.indexOf(this.moveDir)][i]);
+      let nextLoc = this.getNewLocByDir(this.snakeLocations[0], this.moveDir);
       if (nextLoc[0] > -1 && nextLoc[0] < this.settings.saved.mazeCol && nextLoc[1] > -1 && nextLoc[1] < this.settings.saved.mazeRow) {
         let strFoodLocs = this.foodLocations.map(x => JSON.stringify(x));
         let strNextLoc = JSON.stringify(nextLoc);
         if (strFoodLocs.includes(strNextLoc)) {
           this.foodLocations.splice(strFoodLocs.indexOf(strNextLoc), 1);
-          this.snakeLength += 1;
+          if (!this.settings.saved.staticLength) this.snakeLength += 1;
           [...Array(this.settings.saved.foodNumber-this.foodLocations.length).keys()].forEach(() => this.generateFoodLocation());
           this.logs.push("Yay! Just ate a food!");
         }
