@@ -38,6 +38,10 @@ var vm = new Vue({
     }],
     selectedPlayer: "",
     snakeLength: 0,
+    snakeDotR: 10,
+    snakeDotDirScale: 0.5,
+    allDirs: ["n", "s", "w", "e"],
+    dirOperations: [ [0, -1], [0, +1], [-1, 0], [+1, 0] ]
   },
   computed: {
     settingsModified: function () {
@@ -61,6 +65,16 @@ var vm = new Vue({
     },
     snakeColors: function () {
       return this.snakeLocations.map((val,idx,arr) => Math.ceil((arr.length-idx)/arr.length *10)*10);
+    },
+    snakeDotDir: function () {
+      return this.snakeLocations.map((val,idx,arr) => {
+        if (idx == 0) {
+          return this.moveDir;
+        } else {
+          let delta = JSON.stringify([arr[idx-1][0] - val[0], arr[idx-1][1] - val[1]]);
+          return this.allDirs[ this.dirOperations.map(x => JSON.stringify(x)).indexOf(delta) ];
+        }
+      });
     }
   },
   components: {
@@ -154,14 +168,7 @@ var vm = new Vue({
       }
     },
     getNewLocByDir: function (oldLoc, dir) {
-      let allDir = ["n", "s", "w", "e"];
-      let operations = [
-        [0, -1],
-        [0, +1],
-        [-1, 0],
-        [+1, 0]
-      ];
-      let operation = operations[allDir.indexOf(dir)];
+      let operation = this.dirOperations[this.allDirs.indexOf(dir)];
       return [oldLoc[0] + operation[0], oldLoc[1] + operation[1]];
     },
     generateFoodLocation: function () {
