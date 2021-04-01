@@ -41,7 +41,9 @@ var vm = new Vue({
     snakeDotR: 10,
     snakeDotDirScale: 0.5,
     allDirs: ["n", "s", "w", "e"],
-    dirOperations: [ [0, -1], [0, +1], [-1, 0], [+1, 0] ]
+    dirOperations: [ [0, -1], [0, +1], [-1, 0], [+1, 0] ],
+    failed: false,
+    failedFace: 0
   },
   computed: {
     settingsModified: function () {
@@ -118,7 +120,12 @@ var vm = new Vue({
         if (this.controls.interval.id) clearInterval(this.controls.interval.id);
         this.controls.interval.id = null;
       }
-    }
+    },
+    failed: function (newfailed) {
+      if (newfailed) {
+        this.failedFace = Math.floor(Math.random() * 7);
+      }
+    } 
   },
   methods: {
     initialiseGame: function () {
@@ -127,6 +134,7 @@ var vm = new Vue({
       this.foodLocations.splice(0, this.foodLocations.length);
       [...Array(this.settings.saved.foodNumber).keys()].forEach(() => this.generateFoodLocation());
       this.snakeLength = this.settings.saved.startLength;
+      this.failed = false;
     },
     setSnakeInitialLocations: function () {
       this.snakeLocations.splice(0, this.snakeLocations.length);
