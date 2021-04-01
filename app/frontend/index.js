@@ -43,7 +43,8 @@ var vm = new Vue({
     allDirs: ["n", "s", "w", "e"],
     dirOperations: [ [0, -1], [0, +1], [-1, 0], [+1, 0] ],
     failed: false,
-    failedFace: 0
+    failedFace: 0,
+    numberOfFailedFace: 7
   },
   computed: {
     settingsModified: function () {
@@ -123,7 +124,7 @@ var vm = new Vue({
     },
     failed: function (newfailed) {
       if (newfailed) {
-        this.failedFace = Math.floor(Math.random() * 7);
+        this.controls.play = false;
       }
     } 
   },
@@ -135,6 +136,7 @@ var vm = new Vue({
       [...Array(this.settings.saved.foodNumber).keys()].forEach(() => this.generateFoodLocation());
       this.snakeLength = this.settings.saved.startLength;
       this.failed = false;
+      this.failedFace = Math.floor(Math.random() * this.numberOfFailedFace);
     },
     setSnakeInitialLocations: function () {
       this.snakeLocations.splice(0, this.snakeLocations.length);
