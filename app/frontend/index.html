@@ -9,6 +9,8 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
   <link href='https://css.gg/css' rel='stylesheet'>
   <style>
+    .collapsed { transform: scale(0); }
+    .expanded { transform: scale(1); }
     .collapsed-y { transform: scaleY(0); }
     .expanded-y { transform: scaleY(1); }
     .origin-top { transform-origin: top; }
@@ -35,10 +37,80 @@
     .snake-dot-dir-80 { fill: #FBCFE8; }
     .snake-dot-dir-90 { fill: #FCE7F3; }
     .snake-dot-dir-100 { fill: #FDF2F8; }
+    .max-h-perc-10 { max-height: 10%; }
+    .max-h-perc-20 { max-height: 20%; }
+    .max-h-perc-30 { max-height: 30%; }
+    .max-h-perc-40 { max-height: 40%; }
+    .max-h-perc-50 { max-height: 50%; }
+    .max-h-perc-60 { max-height: 60%; }
+    .max-h-perc-70 { max-height: 70%; }
+    .max-h-perc-80 { max-height: 80%; }
+    .max-h-perc-90 { max-height: 90%; }
   </style>
 </head>
 <body>
   <div id="app" class="h-screen w-screen flex divide-x p-2">
+    <!-- popup overlay -->
+    <overlay class="transition-opacity duration-500" :class="overlay.gameControls ? 'visible opacity-100' : 'invisible opacity-0'"
+      dialog-class="h-auto w-3/4 p-4 max-h-perc-90 flex flex-col"  
+      @bg-click="overlay.gameControls = false"
+    >
+      <div class="border-b flex flex-row flex-0 text-2xl pb-2">
+        <span class="flex-1">Game controls</span>
+        <button class="ri-close-line" @click="overlay.gameControls = false"></button>
+      </div>
+      <div class="overflow-auto flex-1">
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      <div>test</div>
+      </div>
+    </overlay>
+    <!-- content -->
     <div class="flex-1 h-full p-5">
       <svg style="width:100%;height:100%" :view-box.camel="mazeViewBox">
         <rect v-for="(loc,i) in mazePadLoc" :key="`box-${i}`" :x="loc[0]" :y="loc[1]" :width="mazeSettings.unit" :height="mazeSettings.unit" class="maze-pad"></rect>
@@ -242,7 +314,7 @@
           <i class="absolute ri-loader-5-line animate-spin text-7xl"></i>
         </div>
         <!-- control buttons -->
-        <text-button class="m-1 p-1"><i class="ri-question-line"></i>&nbsp;Info for game controls</text-button>
+        <text-button class="m-1 p-1" @click="overlay.gameControls = true"><i class="ri-question-line"></i>&nbsp;Info for game controls</text-button>
         <button-with-label 
           :icon="controls.manual ? 'ri-user-line' : 'ri-skull-2-line'"
           :label="controls.manual ? 'Human' : 'Agent'"
@@ -341,6 +413,14 @@
         <span :class="icon"></span>
       </button>
       <div class="flex-1 pl-1">{{ label }}</div>
+    </div>
+  </template>
+
+  <template id="overlay">
+    <div class="absolute top-0 left-0 h-full w-full flex flex-row p-1 bg-gray-500 bg-opacity-70 justify-center items-center z-50" @click.self="$emit('bg-click')">
+      <div class="bg-white rounded" :class="dialogClass">
+        <slot></slot>
+      </div>
     </div>
   </template>
   <script src="./frontend/index.js"></script>

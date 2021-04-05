@@ -44,7 +44,10 @@ var vm = new Vue({
     dirOperations: [ [0, -1], [0, +1], [-1, 0], [+1, 0] ],
     failed: false,
     failedFace: 0,
-    numberOfFailedFace: 7
+    numberOfFailedFace: 7,
+    overlay: {
+      gameControls: false
+    }
   },
   computed: {
     settingsModified: function () {
@@ -92,6 +95,10 @@ var vm = new Vue({
     "text-button": {
       template: "#text-button"
     },
+    "overlay": {
+      template: "#overlay",
+      props: ["dialog-class"]
+    }
   },
   mounted: function () {
     this.settings.saved = Object.assign({}, this.settings.saved, this.settings.displayed);
