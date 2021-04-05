@@ -240,6 +240,7 @@ var vm = new Vue({
     moveSnake: function () {
       let nextLoc = this.getNewLocByDir(this.snakeLocations[0], this.moveDir);
       if (nextLoc[0] > -1 && nextLoc[0] < this.settings.saved.mazeCol && nextLoc[1] > -1 && nextLoc[1] < this.settings.saved.mazeRow) { // if within maze
+        let strSnakeLocs = this.snakeLocations.map(x => JSON.stringify(x));
         let strFoodLocs = this.foodLocations.map(x => JSON.stringify(x));
         let strNextLoc = JSON.stringify(nextLoc);
         if (strFoodLocs.includes(strNextLoc)) {
@@ -248,9 +249,14 @@ var vm = new Vue({
           [...Array(this.settings.saved.foodNumber-this.foodLocations.length).keys()].forEach(() => this.generateFoodLocation());
           this.logs.push("Yay! Just ate a food!");
           this.accPoints += 1;
+        } 
+        if (strSnakeLocs.includes(strNextLoc)) {
+          this.logs.push("stop biting yourself!");
+          this.failed = true;
+        } else {
+          this.snakeLocations.splice(0, 0, nextLoc);
+          this.snakeLocations.splice(this.snakeLength, this.snakeLocations.length - this.snakeLength);
         }
-        this.snakeLocations.splice(0, 0, nextLoc);
-        this.snakeLocations.splice(this.snakeLength, this.snakeLocations.length - this.snakeLength);
       } else {
         this.logs.push("hit a wall");
         this.failed = true;
