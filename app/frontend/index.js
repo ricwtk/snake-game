@@ -102,7 +102,7 @@ var vm = new Vue({
           if (this.controls.manual && this.controls.play) {
             this.moveSnakeByKeyboard(e.key);
           }
-        } else if (["p"].includes(e.key.toLowerCase())) {
+        } else if (["p","r"].includes(e.key.toLowerCase())) {
           this.keyboardControl(e.key.toLowerCase());
         }
       }
@@ -210,7 +210,11 @@ var vm = new Vue({
     },
     keyboardControl: function (key) {
       if (key == "p") {
+        if (this.failed) { this.initialiseGame(); }
         this.controls.play = !this.controls.play;
+      }
+      if (key == "r") {
+        this.initialiseGame();
       }
     },
     moveSnakeByKeyboard: function (key) {
@@ -235,7 +239,7 @@ var vm = new Vue({
     },
     moveSnake: function () {
       let nextLoc = this.getNewLocByDir(this.snakeLocations[0], this.moveDir);
-      if (nextLoc[0] > -1 && nextLoc[0] < this.settings.saved.mazeCol && nextLoc[1] > -1 && nextLoc[1] < this.settings.saved.mazeRow) {
+      if (nextLoc[0] > -1 && nextLoc[0] < this.settings.saved.mazeCol && nextLoc[1] > -1 && nextLoc[1] < this.settings.saved.mazeRow) { // if within maze
         let strFoodLocs = this.foodLocations.map(x => JSON.stringify(x));
         let strNextLoc = JSON.stringify(nextLoc);
         if (strFoodLocs.includes(strNextLoc)) {
@@ -249,6 +253,7 @@ var vm = new Vue({
         this.snakeLocations.splice(this.snakeLength, this.snakeLocations.length - this.snakeLength);
       } else {
         this.logs.push("hit a wall");
+        this.failed = true;
       }
     }
   }
