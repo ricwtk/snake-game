@@ -315,8 +315,8 @@
         <button class="ri-chat-delete-line" @click="logs.splice(0,logs.length)"></button>
         <button class="ml-2" :class="showLogs ? 'ri-eye-off-line' : 'ri-eye-line'" @click="showLogs=!showLogs"></button>
       </div>
-      <div class="w-full flex-1 overscroll-contain overflow-auto divide-y flex flex-col">
-        <div v-for="(log,logidx) in logs" :key="logidx" class="p-1" v-if="showLogs">
+      <div class="w-full flex-1 overscroll-contain overflow-auto divide-y flex flex-col" ref="logs">
+        <div v-for="(log,logidx) in logs" :key="logidx" class="p-1" v-if="showLogs" ref="log">
           {{ log }}
         </div>
       </div>

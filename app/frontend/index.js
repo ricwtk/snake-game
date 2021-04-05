@@ -126,7 +126,16 @@ var vm = new Vue({
       if (newfailed) {
         this.controls.play = false;
       }
-    } 
+    },
+    logs: function () {
+      if (this.$refs.log) {
+        this.$nextTick(() => {
+          if ((this.$refs.logs.scrollTopMax - this.$refs.log[this.$refs.log.length-1].offsetHeight) <= this.$refs.logs.scrollTop) {
+            this.$refs.logs.scrollTop = this.$refs.logs.scrollTopMax
+          }
+        })
+      }
+    }
   },
   methods: {
     initialiseGame: function () {
@@ -247,18 +256,18 @@ var vm = new Vue({
           this.foodLocations.splice(strFoodLocs.indexOf(strNextLoc), 1);
           if (!this.settings.saved.staticLength) this.snakeLength += 1;
           [...Array(this.settings.saved.foodNumber-this.foodLocations.length).keys()].forEach(() => this.generateFoodLocation());
-          this.logs.push("Yay! Just ate a food!");
+          this.$nextTick(() => {this.logs.push("Yay! Just ate a food!")});
           this.accPoints += 1;
         } 
         if (strSnakeLocs.includes(strNextLoc)) {
-          this.logs.push("stop biting yourself!");
+          this.$nextTick(() => {this.logs.push("stop biting yourself!")});
           this.failed = true;
         } else {
           this.snakeLocations.splice(0, 0, nextLoc);
           this.snakeLocations.splice(this.snakeLength, this.snakeLocations.length - this.snakeLength);
         }
       } else {
-        this.logs.push("hit a wall");
+        this.$nextTick(() => {this.logs.push("hit a wall")});
         this.failed = true;
       }
     }
