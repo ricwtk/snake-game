@@ -55,59 +55,69 @@
       dialog-class="h-auto w-3/4 p-4 max-h-perc-90 flex flex-col"  
       @bg-click="overlay.gameControls = false"
     >
-      <div class="border-b flex flex-row flex-0 text-2xl pb-2">
+      <div class="border-b mb-3 flex flex-row flex-0 text-2xl pb-2">
         <span class="flex-1">Game controls</span>
         <button class="ri-close-line" @click="overlay.gameControls = false"></button>
       </div>
-      <div class="overflow-auto flex-1">
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
-      <div>test</div>
+      <div class="overflow-auto flex-1 flex flex-col">
+        <button-with-label icon="ri-user-line" label="Human"></button-with-label>
+        <div class="ml-5">Snake is controlled with keyboard. Click to switch to agent mode.</div>
+        <div class="text-center">
+          <svg viewBox="-50 -48 150 100" width="200px" class="inline">
+            <text text-anchor="start" dominant-baseline="middle" x="0" y="0">&#9666;</text>
+            <text text-anchor="middle" dominant-baseline="text-top" x="24" y="16">&#9662;</text>
+            <text text-anchor="end" dominant-baseline="middle" x="48" y="0">&#9656;</text>
+            <text text-anchor="middle" dominant-baseline="mathematical" x="24" y="-16">&#9652;</text>
+            <text text-anchor="middle" dominant-baseline="text-top" x="24" y="-20">north</text>
+            <text text-anchor="middle" dominant-baseline="mathematical" x="24" y="20">south</text>
+            <text text-anchor="end" dominant-baseline="middle" x="0" y="0">west</text>
+            <text text-anchor="start" dominant-baseline="middle" x="48" y="0">east</text>
+          </svg>
+        </div>
+        <hr class="my-3">
+        <button-with-label icon="ri-skull-2-line" label="Agent"></button-with-label>
+        <div class="ml-5">Snake is controlled by AI agent. Click to switch to human mode. Select the agent from dropdown list.</div>
+        <hr class="my-3">
+        <button-with-label icon="ri-play-line" label="Paused"></button-with-label>
+        <div class="ml-5">Game is paused or uninitiated. Click to start or resume the game. Keyboard shortcut: <kbd>P</kbd></div>
+        <div class="ml-5">[<i class="ri-user-line"></i>] The game starts with snake moving at x steps per second as configured. Keyboard controls for snake direction are enabled.</div>
+        <div class="ml-5">[<i class="ri-skull-2-line"></i>] The selected agent is initialised. The latest game states are sent to the agent. The game waits for solution and search tree from the agent.</div>
+        <hr class="my-3">
+        <button-with-label icon="ri-pause-line" label="Playing"></button-with-label>
+        <div class="ml-5">Game is running. Click to pause the game. Keyboard shortcut: <kbd>P</kbd></div>
+        <div class="ml-5">[<i class="ri-user-line"></i>] The game is paused at that instance. Arrow keys cannot be used to change the direction.</div>
+        <div class="ml-5">[<i class="ri-skull-2-line"></i>] The game is paused after receiving the solution from the agent. Upon resuming, only then the latest game states are sent to the agent.</div>
+        <hr class="my-3">
+        <button-with-label icon="ri-restart-line" label="Reset"></button-with-label>
+        <div class="ml-5">Click to reset the game. Keyboard shortcut: <kbd>R</kbd></div>
+        <div class="ml-5">[<i class="ri-user-line"></i>] The game states are reset.</div>
+        <div class="ml-5">[<i class="ri-skull-2-line"></i>] The game states are reset.</div>
+        <hr class="my-3">
+        <button-with-label icon="ri-arrow-right-s-line" label="Step-by-step"></button-with-label>
+        <div class="ml-5">Only available in <i class="ri-skull-2-line"></i>. The game will only proceed when <text-button class="p-1" style="display:inline">Next step</text-button> is clicked. Click to switch to automatic progression.</div>
+        <hr class="my-3">
+        <button-with-label icon="ri-arrow-right-s-line" label="Automatic progression"></button-with-label>
+        <div class="ml-5">Only available in <i class="ri-skull-2-line"></i>. The game will automatically proceed when solution is received from agent. Click to switch to step by step progression.</div>
+        <hr class="my-3">
+        <div class="mx-1">Moving speed: <b>x</b> step per second</div>
+        <div class="flex flex-row">
+          <input type="range" class="flex-1 mx-1 p-1" min="0" max="100"/>
+          <div class="flex-1"></div>
+          <div class="flex-1"></div>
+        </div>
+        <div class="ml-5">Only available in <i class="ri-user-line"></i>. Snake will progress with x step per second.</div>
+        <div class="ml-5">At 0 step per second, snake will move one step for each valid keyboard input.</div>
+        <hr class="my-3">
+        <div class="mx-1">Animation speed: <b>x</b> step per second</div>
+        <div class="flex flex-row">
+          <input type="range" class="flex-1 mx-1 p-1" min="0" max="100"/>
+          <div class="flex-1"></div>
+          <div class="flex-1"></div>
+        </div>
+        <div class="ml-5">Only available in <i class="ri-skull-2-line"></i>. This controls the animation speed of the snake when solution is provided by the agent.</div>
+        <hr class="my-3">
+        <button-with-label icon="ri-organization-chart" label="Show search trees"></button-with-label>
+        <div class="ml-5">Only available in <i class="ri-skull-2-line"></i>. Click to show the search tree generated by the agent during the search for solution.</div>
       </div>
     </overlay>
     <!-- content -->
