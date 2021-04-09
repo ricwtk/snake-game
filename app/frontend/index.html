@@ -330,9 +330,12 @@
           :label="controls.manual ? 'Human' : 'Agent'"
           @click="controls.manual=!controls.manual">
         </button-with-label>
-        <select label="Choose player" class="border p-1 mx-1 mb-1" v-model="selectedPlayer" :disabled="controls.manual">
-          <option v-for="player,i in playerList" :key="i" :value="player.value">{{ player.label }}</option>
-        </select>
+        <div class="flex flex-row">
+          <select label="Choose player" class="border p-1 mx-1 flex-1" v-model="selectedPlayer" :disabled="controls.manual">
+            <option v-for="player,i in playerList" :key="i" :value="player.name">{{ player.name }}</option>
+          </select>
+          <button-only icon="ri-refresh-line" class="w-10 h-10 mr-1" @click="getPlayerList"></button-only>
+        </div>
         <button-with-label 
           :icon="controls.play ? 'ri-pause-line' : 'ri-play-line'"
           :label="controls.play ? 'Playing' : 'Paused'"

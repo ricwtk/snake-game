@@ -104,6 +104,7 @@ var vm = new Vue({
   mounted: function () {
     this.settings.saved = Object.assign({}, this.settings.saved, this.settings.displayed);
     this.initialiseGame();
+    this.getPlayerList();
     document.onkeydown = (e) => {      
       if (e.target.tagName !== "INPUT") {
         if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
@@ -280,6 +281,12 @@ var vm = new Vue({
         this.$nextTick(() => {this.logs.push("hit a wall")});
         this.failed = true;
       }
+    },
+    getPlayerList: function () {
+      let req = new Request("./get-player-list");
+      fetch(req)
+      .then(r => r.json())
+      .then(r => { this.playerList = r.content; });
     }
   }
 });
