@@ -86,14 +86,15 @@ var vm = new Vue({
   components: {
     "button-with-label": {
       template: "#button-with-label",
-      props: ["icon", "label"]
+      props: ["icon", "label", "disabled"]
     },
     "button-only": {
       template: "#button-only",
       props: ["icon"]
     },
     "text-button": {
-      template: "#text-button"
+      template: "#text-button",
+      props: ["disabled", "button-class"]
     },
     "overlay": {
       template: "#overlay",

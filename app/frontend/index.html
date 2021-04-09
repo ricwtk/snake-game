@@ -324,7 +324,7 @@
           <i class="absolute ri-loader-5-line animate-spin text-7xl"></i>
         </div>
         <!-- control buttons -->
-        <text-button class="m-1 p-1" @click="overlay.gameControls = true"><i class="ri-question-line"></i>&nbsp;Info for game controls</text-button>
+        <text-button @click="overlay.gameControls = true"><i class="ri-question-line"></i>&nbsp;Info for game controls</text-button>
         <button-with-label 
           :icon="controls.manual ? 'ri-user-line' : 'ri-skull-2-line'"
           :label="controls.manual ? 'Human' : 'Agent'"
@@ -343,17 +343,17 @@
           label="Reset"
           @click="initialiseGame">
         </button-with-label>
-        <button-with-label v-if="!controls.manual"
+        <button-with-label :disabled="controls.manual"
           :icon="controls.stepping ? 'ri-arrow-right-s-line' : 'ri-speed-line'"
           :label="controls.stepping ? 'Step-by-step' : 'Automatic progression'"
           @click="controls.stepping=!controls.stepping">
         </button-with-label>
-        <text-button v-if="!controls.manual" class="mx-1 p-1 mb-1" :class="controls.stepping ? '' : 'text-gray-300'" :disabled="!controls.stepping" @click="nextStep">Next step</text-button>
+        <text-button :disabled="controls.manual" :class="controls.stepping ? '' : 'text-gray-300'" :disabled="!controls.stepping" @click="nextStep">Next step</text-button>
         <div class="pt-1 mx-1">{{ controls.manual ? 'Moving' : 'Animation' }} speed: <span class="font-bold">{{ controls.interval.current }}</span> step per second</div>
         <div class="flex flex-row pb-1">
           <input type="range" class="flex-1 mx-1 p-1" v-model="controls.interval.current" min="0" :max="controls.interval.max"/>
         </div>
-        <button-with-label v-if="!controls.manual"
+        <button-with-label :disabled="controls.manual"
           icon="ri-organization-chart"
           label="Show search trees"
           @click="showtrees">
@@ -412,13 +412,17 @@
   </template>
 
   <template id="text-button">
-    <button class="border flex flex-row justify-center items-center" @click="$emit('click')">
-      <slot></slot>
-    </button>
+    <div class="flex flex-row items-center p-1 h-10 items-stretch relative">
+      <div v-if="disabled" class="absolute top-0 left-0 h-full w-full bg-gray-500 bg-opacity-20"></div>
+      <button class="border flex-1 flex flex-row justify-center items-center" @click="$emit('click')" :class="buttonClass">
+        <slot></slot>
+      </button>
+    </div>
   </template>
 
   <template id="button-with-label">
-    <div class="flex flex-row items-center p-1 h-10">
+    <div class="flex flex-row items-center p-1 h-10 relative">
+      <div v-if="disabled" class="absolute top-0 left-0 h-full w-full bg-gray-500 bg-opacity-20"></div>
       <button class="flex-none w-10 flex flex-row justify-center h-full items-center border" @click="$emit('click')">
         <span :class="icon"></span>
       </button>
