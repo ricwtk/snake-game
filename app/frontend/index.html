@@ -318,7 +318,7 @@
       </div>
       <div class="w-full overscroll-contain overflow-auto flex flex-col border-b transition-all origin-top" :class="showControls ? 'flex-1 expanded-y' : 'flex-0 h-0 collapsed-y'">
         <!-- playing overlay -->
-        <div class="absolute top-0 h-full w-full flex flex-row p-1 bg-gray-500 bg-opacity-70 justify-center items-center" v-if="controls.play" @click="controls.play = false">
+        <div class="absolute top-0 h-full w-full flex flex-row p-1 bg-gray-500 bg-opacity-70 justify-center items-center z-30" v-if="controls.play" @click="controls.play = false">
           <!-- <button-only icon="ri-pause-line" class="h-1/2 w-1/2 bg-gray-500 border-gray-500 text-white" @click="controls.play = false"></button-only> -->
           <i class="absolute ri-pause-line"></i>
           <i class="absolute ri-loader-5-line animate-spin text-7xl"></i>
