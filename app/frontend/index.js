@@ -1,3 +1,26 @@
+// custom components registration
+Vue.component("button-with-label", {
+  template: "#button-with-label",
+  props: ["icon", "label", "disabled"]
+});
+Vue.component("button-only", {
+  template: "#button-only",
+  props: ["icon"]
+});
+Vue.component("text-button", {
+  template: "#text-button",
+  props: ["disabled", "button-class"]
+});
+Vue.component("overlay", {
+  template: "#overlay",
+  props: ["dialog-class"]
+});
+Vue.component("select-with-action", {
+  template: "#select-with-action",
+  props: ["disabled", "label", "value", "action-icon", "options", "value-key", "display-key"]
+});
+
+// initiation of Vue app
 var vm = new Vue({
   el: "#app",
   data: {
@@ -83,24 +106,28 @@ var vm = new Vue({
       });
     }
   },
-  components: {
-    "button-with-label": {
-      template: "#button-with-label",
-      props: ["icon", "label", "disabled"]
-    },
-    "button-only": {
-      template: "#button-only",
-      props: ["icon"]
-    },
-    "text-button": {
-      template: "#text-button",
-      props: ["disabled", "button-class"]
-    },
-    "overlay": {
-      template: "#overlay",
-      props: ["dialog-class"]
-    }
-  },
+  // components: {
+  //   "button-with-label": {
+  //     template: "#button-with-label",
+  //     props: ["icon", "label", "disabled"]
+  //   },
+  //   "button-only": {
+  //     template: "#button-only",
+  //     props: ["icon"]
+  //   },
+  //   "text-button": {
+  //     template: "#text-button",
+  //     props: ["disabled", "button-class"]
+  //   },
+  //   "overlay": {
+  //     template: "#overlay",
+  //     props: ["dialog-class"]
+  //   },
+  //   "select-with-action": {
+  //     template: "#select-with-action",
+  //     props: ["disabled", "label", "value", "action-icon"]
+  //   }
+  // },
   mounted: function () {
     this.settings.saved = Object.assign({}, this.settings.saved, this.settings.displayed);
     this.initialiseGame();
@@ -286,7 +313,10 @@ var vm = new Vue({
       let req = new Request("./get-player-list");
       fetch(req)
       .then(r => r.json())
-      .then(r => { this.playerList = r.content; });
+      .then(r => { this.playerList = r.content; })
+      .then(() => {
+        if (!this.playerList.map(it => it.name).includes(this.selectedPlayer)) this.selectedPlayer = this.playerList[0].name;
+      });
     }
   }
 });

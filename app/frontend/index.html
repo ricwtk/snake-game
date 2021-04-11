@@ -78,6 +78,15 @@
         <button-with-label icon="ri-skull-2-line" label="Agent"></button-with-label>
         <div class="ml-5">Snake is controlled by AI agent. Click to switch to human mode. Select the agent from dropdown list.</div>
         <hr class="my-3">
+        <select-with-action class="w-1/3" label="Choose player"
+          action-icon="ri-refresh-line" 
+          :options="[{name: 'player1'}, {name: 'player2'}]"
+          value="player1"
+          value-key="name"
+          display-key="name"
+        ></select-with-action>
+        <div class="ml-5">Only available in <i class="ri-skull-2-line"></i>. Select agent from dropdown list. Click <button-only icon="ri-refresh-line" style="display:inline" class="w-10"></button-only> to refresh list of agents.</div>
+        <hr class="my-3">
         <button-with-label icon="ri-play-line" label="Paused"></button-with-label>
         <div class="ml-5">Game is paused or uninitiated. Click to start or resume the game. Keyboard shortcut: <kbd>P</kbd></div>
         <div class="ml-5">[<i class="ri-user-line"></i>] The game starts with snake moving at x steps per second as configured. Keyboard controls for snake direction are enabled.</div>
@@ -330,12 +339,15 @@
           :label="controls.manual ? 'Human' : 'Agent'"
           @click="controls.manual=!controls.manual">
         </button-with-label>
-        <div class="flex flex-row">
-          <select label="Choose player" class="border p-1 mx-1 flex-1" v-model="selectedPlayer" :disabled="controls.manual">
-            <option v-for="player,i in playerList" :key="i" :value="player.name">{{ player.name }}</option>
-          </select>
-          <button-only icon="ri-refresh-line" class="w-10 h-10 mr-1" @click="getPlayerList"></button-only>
-        </div>
+        <select-with-action label="Choose player" 
+          v-model="selectedPlayer" 
+          :disabled="controls.manual" 
+          action-icon="ri-refresh-line" 
+          @action="getPlayerList"
+          :options="playerList"
+          value-key="name"
+          display-key="name"
+        ></select-with-action>
         <button-with-label 
           :icon="controls.play ? 'ri-pause-line' : 'ri-play-line'"
           :label="controls.play ? 'Playing' : 'Paused'"
@@ -415,7 +427,7 @@
   </template>
 
   <template id="text-button">
-    <div class="flex flex-row items-center p-1 h-10 items-stretch relative">
+    <div class="flex flex-row items-center p-1 h-12 items-stretch relative">
       <div v-if="disabled" class="absolute top-0 left-0 h-full w-full bg-gray-500 bg-opacity-20"></div>
       <button class="border flex-1 flex flex-row justify-center items-center" @click="$emit('click')" :class="buttonClass">
         <slot></slot>
@@ -424,12 +436,22 @@
   </template>
 
   <template id="button-with-label">
-    <div class="flex flex-row items-center p-1 h-10 relative">
+    <div class="flex flex-row items-center p-1 h-12 relative">
       <div v-if="disabled" class="absolute top-0 left-0 h-full w-full bg-gray-500 bg-opacity-20"></div>
       <button class="flex-none w-10 flex flex-row justify-center h-full items-center border" @click="$emit('click')">
         <span :class="icon"></span>
       </button>
       <div class="flex-1 pl-1">{{ label }}</div>
+    </div>
+  </template>
+
+  <template id="select-with-action">
+    <div class="flex flex-row items-center p-1 h-12 relative">
+      <div v-if="disabled" class="absolute top-0 left-0 h-full w-full bg-gray-500 bg-opacity-20"></div>
+      <select :label="label" class="h-full flex-1 border" :value="value" @input="$emit('input', $event.target.value)" :disabled="disabled">
+        <option v-for="item,i in options" :key="i" :value="item[valueKey]">{{ item[displayKey] }}</option>
+      </select>
+      <button-only :icon="actionIcon" class="w-10 h-full ml-1" @click="$emit('action')"></button-only>
     </div>
   </template>
 
