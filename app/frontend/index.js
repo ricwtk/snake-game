@@ -59,7 +59,12 @@ var vm = new Vue({
       value: "",
       label: ""
     }],
-    selectedPlayer: "",
+    selectedPlayer: {
+      folder: "",
+      socket: null,
+      solutions: [],
+      searchTrees: []
+    },
     snakeLength: 0,
     snakeDotR: 10,
     snakeDotDirScale: 0.5,
@@ -106,28 +111,6 @@ var vm = new Vue({
       });
     }
   },
-  // components: {
-  //   "button-with-label": {
-  //     template: "#button-with-label",
-  //     props: ["icon", "label", "disabled"]
-  //   },
-  //   "button-only": {
-  //     template: "#button-only",
-  //     props: ["icon"]
-  //   },
-  //   "text-button": {
-  //     template: "#text-button",
-  //     props: ["disabled", "button-class"]
-  //   },
-  //   "overlay": {
-  //     template: "#overlay",
-  //     props: ["dialog-class"]
-  //   },
-  //   "select-with-action": {
-  //     template: "#select-with-action",
-  //     props: ["disabled", "label", "value", "action-icon"]
-  //   }
-  // },
   mounted: function () {
     this.settings.saved = Object.assign({}, this.settings.saved, this.settings.displayed);
     this.initialiseGame();
@@ -147,15 +130,22 @@ var vm = new Vue({
   watch: {
     "controls.play": function (newplay, oldplay) {
       if (newplay) {
-        this.logs.push("Game started");
-        if (this.controls.interval.current > 0) {
-          this.controls.interval.id = setInterval(this.moveSnake, 1000/this.controls.interval.current);
+        if (this.controls.manual) { // human mode
+          this.logs.push("Game started");
+          if (this.controls.interval.current > 0) {
+            this.controls.interval.id = setInterval(this.moveSnake, 1000/this.controls.interval.current);
+          }
+        } else { // agent mode
+          this.initiateAgent();
         }
       }
       else {
-        this.logs.push("Game is paused");
-        if (this.controls.interval.id) clearInterval(this.controls.interval.id);
-        this.controls.interval.id = null;
+        if (this.controls.manual) { // human mode
+          this.logs.push("Game is paused");
+          if (this.controls.interval.id) clearInterval(this.controls.interval.id);
+          this.controls.interval.id = null;
+        } else { // agent mode
+        }
       }
     },
     failed: function (newfailed) {
@@ -315,8 +305,37 @@ var vm = new Vue({
       .then(r => r.json())
       .then(r => { this.playerList = r.content; })
       .then(() => {
-        if (!this.playerList.map(it => it.name).includes(this.selectedPlayer)) this.selectedPlayer = this.playerList[0].name;
+        if (!this.playerList.map(it => it.folder).includes(this.selectedPlayer.folder)) this.selectedPlayer.folder = this.playerList[0].folder;
       });
+    },
+    initiateAgent: function () {
+      this.selectedPlayer.socket = new WebSocket(`ws://${location.host}/select-player/${this.selectedPlayer.folder}`);
+      this.selectedPlayer.socket.onopen = (ev) => {
+        this.selectedPlayer.solutions = [];
+        this.selectedPlayer.searchTrees = [];
+      };
+      this.selectedPlayer.socket.onclose = (ev) => {
+        this.selectedPlayer.socket = null;
+      };
+      this.selectedPlayer.socket.onmessage = (ev) => {
+        let data = JSON.parse(ev.data);
+        if (data.err) {
+          this.logs.push(data.data);
+        } else if (data.purpose == "player check") {
+          if (data.err) { this.logs.push(data.data); }
+          else { this.logs.push(`Player ${data.data.name} module is available`); }
+          ev.target.send(JSON.stringify({
+            purpose: "setup",
+            data: {
+              maze_size: [this.settings.saved.mazeRow, this.settings.saved.mazeCol],
+              static_snake_length: this.settings.saved.staticLength
+            }
+          }));
+        } else if (data.purpose == "initiation") {
+          if (data.err) { this.logs.push(data.data); }
+          else { this.logs.push(`Player ${data.data.name} is initiated`); }
+        }
+      }
     }
   }
 });

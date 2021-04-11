@@ -60,21 +60,23 @@ def retrievePlayerDetails(player):
     details["err"] = sendError(player["err"])
   return details
 
-def initPlayer(folderName):
+def checkPlayerAvail(folderName):
   global players
   player = players[ [ p["folder"] for p in players ].index(folderName) ]
-  initiated_player = {
+  checked_player = {
     "beforeinit": player,
     "player": None,
     "err": None
   }
   if player["module"] is None:
-    initiated_player.update({ "err": player["err"] })
-  else:
-    try:
-      initiated_player.update({ "player": player["module"]() })
-    except:
-      initiated_player.update({ "err": sys.exc_info() })
+    checked_player.update({ "err": player["err"] })
+  return checked_player
+
+def initPlayer(initiated_player, init_param):
+  try:
+    initiated_player.update({ "player": initiated_player["beforeinit"]["module"](init_param) })
+  except:
+    initiated_player.update({ "err": sys.exc_info() })
   return initiated_player
 
 @app.get("/get-player-list")
@@ -96,17 +98,24 @@ class PlayerWSEndpoint(WebSocketEndpoint):
   async def on_connect(self, websocket: WebSocket):
     await websocket.accept()
     folder_name = websocket.url.path.split("/")[-1]
-    self.player = initPlayer(folder_name)
+    self.player = checkPlayerAvail(folder_name)
     await websocket.send_json({
       "err": self.player["err"] is not None,
-      "purpose": "initiation",
+      "purpose": "player check",
       "data": retrievePlayerDetails(self.player["beforeinit"])
     })
   
   async def on_receive(self, websocket: WebSocket, data_str):
     data = json.loads(data_str)
     print("Data received from frontend", data)
-    if data["purpose"] == "problem":
+    if data["purpose"] == "setup":
+      self.player = initPlayer(self.player, data["data"])
+      await websocket.send_json({
+        "err": self.player["err"] is not None,
+        "purpose": "initiation",
+        "data": sendError(self.player["err"]) if self.player["err"] is not None else retrievePlayerDetails(self.player["beforeinit"])
+      })
+    elif data["purpose"] == "problem":
       self.problem = data["data"]
       await websocket.send_json({
         "err": False,

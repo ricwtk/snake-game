@@ -340,12 +340,12 @@
           @click="controls.manual=!controls.manual">
         </button-with-label>
         <select-with-action label="Choose player" 
-          v-model="selectedPlayer" 
+          v-model="selectedPlayer.folder" 
           :disabled="controls.manual" 
           action-icon="ri-refresh-line" 
           @action="getPlayerList"
           :options="playerList"
-          value-key="name"
+          value-key="folder"
           display-key="name"
         ></select-with-action>
         <button-with-label 

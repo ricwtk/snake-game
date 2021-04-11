@@ -11,16 +11,18 @@ class Player():
   ]
   informed = False
 
-  def __init__(self):
-    pass
+  def __init__(self, setup):
+    # setup = {
+    #   maze_size: [int, int],
+    #   static_snake_length: bool
+    # }
+    self.setup = setup
 
   def run(self, problem):
     # problem = {
-    #   maze_size: [int,int],
     #   snake_locations: [[int,int],[int,int],...],
     #   current_direction: str,
     #   food_locations: [[int,int],[int,int],...],
-    #   static_snake_length: bool
     # }
     solution = []
     directions = "nswe"
