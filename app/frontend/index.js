@@ -1,7 +1,7 @@
 // custom components registration
 Vue.component("button-with-label", {
   template: "#button-with-label",
-  props: ["icon", "label", "disabled"]
+  props: ["icon", "disabled"]
 });
 Vue.component("button-only", {
   template: "#button-only",
