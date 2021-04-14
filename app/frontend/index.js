@@ -5,7 +5,7 @@ Vue.component("button-with-label", {
 });
 Vue.component("button-only", {
   template: "#button-only",
-  props: ["icon"]
+  props: ["icon", "disabled"]
 });
 Vue.component("text-button", {
   template: "#text-button",
@@ -31,6 +31,11 @@ var vm = new Vue({
       stepping: true,
       interval: {
         current: 0,
+        max: 10,
+        id: null
+      },
+      animation: {
+        current: 1,
         max: 10,
         id: null
       }
@@ -62,6 +67,7 @@ var vm = new Vue({
     selectedPlayer: {
       folder: "",
       socket: null,
+      states: [],
       solutions: [],
       searchTrees: []
     },
@@ -75,7 +81,7 @@ var vm = new Vue({
     numberOfFailedFace: 7,
     overlay: {
       gameControls: false
-    }
+    },
   },
   computed: {
     settingsModified: function () {
@@ -130,27 +136,42 @@ var vm = new Vue({
   watch: {
     "controls.play": function (newplay, oldplay) {
       if (newplay) {
+        if (this.failed) { this.initialiseGame(); }
         if (this.controls.manual) { // human mode
           this.logs.push("Game started");
           if (this.controls.interval.current > 0) {
             this.controls.interval.id = setInterval(this.moveSnake, 1000/this.controls.interval.current);
           }
         } else { // agent mode
-          this.initiateAgent();
+          if (this.selectedPlayer.socket) { 
+            // returning from paused
+            if (!this.controls.stepping) { this.nextAgentStep(); }
+          } else {
+            this.initiateAgent();
+          }
         }
       }
       else {
+        this.logs.push("Game is paused");
         if (this.controls.manual) { // human mode
-          this.logs.push("Game is paused");
           if (this.controls.interval.id) clearInterval(this.controls.interval.id);
           this.controls.interval.id = null;
         } else { // agent mode
+          this.controls.stepping = true;
         }
       }
     },
     failed: function (newfailed) {
       if (newfailed) {
         this.controls.play = false;
+        if (this.selectedPlayer.socket) { 
+          this.selectedPlayer.socket.close();
+          this.selectedPlayer.socket = null;
+        }
+        if (this.controls.animation.id) {
+          clearInterval(this.controls.animation.id);
+          this.controls.animation.id = null;
+        }
       }
     },
     logs: function () {
@@ -160,6 +181,13 @@ var vm = new Vue({
             this.$refs.logs.scrollTop = this.$refs.logs.scrollTopMax
           }
         })
+      }
+    },
+    "controls.stepping": function (newstepping, oldstepping) {
+      if (this.controls.play) {
+        if (!newstepping) {
+          if (!this.controls.animation.id) { this.nextAgentStep(); }
+        }
       }
     }
   },
@@ -172,6 +200,10 @@ var vm = new Vue({
       this.snakeLength = this.settings.saved.startLength;
       this.failed = false;
       this.failedFace = Math.floor(Math.random() * this.numberOfFailedFace);
+      if (this.selectedPlayer.socket) { 
+        this.selectedPlayer.socket.close();
+        this.selectedPlayer.socket = null;
+      }
     },
     setSnakeInitialLocations: function () {
       this.snakeLocations.splice(0, this.snakeLocations.length);
@@ -246,7 +278,7 @@ var vm = new Vue({
     keyboardControl: function (key) {
       if (key == "p") {
         if (this.failed) { this.initialiseGame(); }
-        this.controls.play = !this.controls.play;
+       this.controls.play = !this.controls.play;
       }
       if (key == "r") {
         this.initialiseGame();
@@ -311,6 +343,7 @@ var vm = new Vue({
     initiateAgent: function () {
       this.selectedPlayer.socket = new WebSocket(`ws://${location.host}/select-player/${this.selectedPlayer.folder}`);
       this.selectedPlayer.socket.onopen = (ev) => {
+        this.selectedPlayer.states = [];
         this.selectedPlayer.solutions = [];
         this.selectedPlayer.searchTrees = [];
       };
@@ -333,9 +366,56 @@ var vm = new Vue({
           }));
         } else if (data.purpose == "initiation") {
           if (data.err) { this.logs.push(data.data); }
-          else { this.logs.push(`Player ${data.data.name} is initiated`); }
+          else { 
+            this.logs.push(`Player ${data.data.name} is initiated`); 
+            if (!this.controls.stepping) { // auto progression
+              this.nextAgentStep();
+            }
+          }
+        } else if (data.purpose == "init execution") {
+          this.logs.push(data.data);
+        } else if (data.purpose == "notification") {
+          this.logs.push(data.data);
+        } else if (data.purpose == "solution") {
+          this.logs.push("Solution returned");
+          this.selectedPlayer.solutions.push(data.data.solution);
+          this.selectedPlayer.searchTrees.push(data.data.search_tree);
+          // show animation
+          this.showAgentSolution(this.selectedPlayer.solutions[this.selectedPlayer.solutions.length-1]);
         }
       }
+    },
+    nextAgentStep: function () {
+      if (this.selectedPlayer.socket) {
+        this.selectedPlayer.states.push({
+          snake_locations: JSON.parse(JSON.stringify(this.snakeLocations)),
+          current_direction: this.moveDir,
+          food_locations: JSON.parse(JSON.stringify(this.foodLocations))
+        });
+        this.selectedPlayer.socket.send(JSON.stringify({
+          purpose: "next step",
+          data: this.selectedPlayer.states[this.selectedPlayer.states.length - 1]
+        }));
+      }
+    },
+    showAgentSolution: function (solution) {
+      // counter for solution
+      let solCounter = 0;
+      // initiate animation timer to move snake
+      this.controls.animation.id = setInterval(
+        () => {
+          this.moveDir = solution[solCounter];
+          this.moveSnake();
+          solCounter += 1;
+          if (solCounter >= solution.length) { 
+            clearInterval(this.controls.animation.id); 
+            this.controls.animation.id = null;
+            if (!this.controls.stepping) {
+              this.nextAgentStep();
+            }
+          }
+        }
+        , 1000/this.controls.animation.current);
     }
   }
 });

@@ -115,15 +115,15 @@ class PlayerWSEndpoint(WebSocketEndpoint):
         "purpose": "initiation",
         "data": sendError(self.player["err"]) if self.player["err"] is not None else retrievePlayerDetails(self.player["beforeinit"])
       })
-    elif data["purpose"] == "problem":
+    elif data["purpose"] == "next step":
       self.problem = data["data"]
       await websocket.send_json({
         "err": False,
         "purpose": "init execution",
-        "data": ""
+        "data": "Execution of search algorithm initiated"
       })
       try:
-        path, search_tree = self.player["player"].run(self.problem)
+        solution, search_tree = self.player["player"].run(self.problem)
       except:
         await websocket.send_json({
           "err": True,
@@ -138,9 +138,9 @@ class PlayerWSEndpoint(WebSocketEndpoint):
       else:
         await websocket.send_json({
           "err": False,
-          "purpose": "terminated",
+          "purpose": "solution",
           "data": {
-            "path": path,
+            "solution": solution,
             "search_tree": search_tree
           }
         })

@@ -327,11 +327,10 @@
       </div>
       <div class="w-full overscroll-contain overflow-auto flex flex-col border-b transition-all origin-top" :class="showControls ? 'flex-1 expanded-y' : 'flex-0 h-0 collapsed-y'">
         <!-- playing overlay -->
-        <div class="absolute top-0 h-full w-full flex flex-row p-1 bg-gray-500 bg-opacity-70 justify-center items-center z-30" v-if="controls.play" @click="controls.play = false">
-          <!-- <button-only icon="ri-pause-line" class="h-1/2 w-1/2 bg-gray-500 border-gray-500 text-white" @click="controls.play = false"></button-only> -->
-          <i class="absolute ri-pause-line"></i>
-          <i class="absolute ri-loader-5-line animate-spin text-7xl"></i>
-        </div>
+        <!-- <div class="absolute top-0 h-full w-full flex flex-row p-1 bg-gray-500 bg-opacity-70 justify-center items-center z-30" v-if="controls.play" @click="controls.play = false"> -->
+          <!-- <i class="absolute ri-pause-line"></i> -->
+          <!-- <i class="absolute ri-loader-5-line animate-spin text-7xl"></i> -->
+        <!-- </div> -->
         <!-- control buttons -->
         <text-button @click="overlay.gameControls = true"><i class="ri-question-line"></i>&nbsp;Info for game controls</text-button>
         <button-with-label 
@@ -354,19 +353,21 @@
           @click="controls.play=!controls.play">
         </button-with-label>
         <button-with-label 
+          :disabled="controls.play"
           icon="ri-restart-line"
           label="Reset"
           @click="initialiseGame">
         </button-with-label>
-        <button-with-label :disabled="controls.manual"
+        <button-with-label :disabled="controls.manual || failed"
           :icon="controls.stepping ? 'ri-arrow-right-s-line' : 'ri-speed-line'"
           :label="controls.stepping ? 'Step-by-step' : 'Automatic progression'"
           @click="controls.stepping=!controls.stepping">
         </button-with-label>
-        <text-button :disabled="controls.manual" :class="controls.stepping ? '' : 'text-gray-300'" :disabled="!controls.stepping" @click="nextStep">Next step</text-button>
-        <div class="pt-1 mx-1">{{ controls.manual ? 'Moving' : 'Animation' }} speed: <span class="font-bold">{{ controls.interval.current }}</span> step per second</div>
+        <text-button :disabled="controls.manual || !controls.stepping || controls.animation.id || failed || !controls.play" @click="nextAgentStep">Next step</text-button>
+        <div class="pt-1 mx-1" :class="controls.play ? 'text-gray-300' : ''">{{ controls.manual ? 'Moving' : 'Animation' }} speed: <span class="font-bold">{{ controls.manual ? controls.interval.current : controls.animation.current }}</span> step per second</div>
         <div class="flex flex-row pb-1">
-          <input type="range" class="flex-1 mx-1 p-1" v-model="controls.interval.current" min="0" :max="controls.interval.max"/>
+          <input v-if="controls.manual" type="range" :disabled="controls.play" class="flex-1 mx-1 p-1" v-model="controls.interval.current" min="0" :max="controls.interval.max"/>
+          <input v-else type="range"  :disabled="controls.play" class="flex-1 mx-1 p-1" v-model="controls.animation.current" min="1" :max="controls.animation.max"/>
         </div>
         <button-with-label :disabled="controls.manual"
           icon="ri-organization-chart"
@@ -421,14 +422,13 @@
   </div>
 
   <template id="button-only">
-    <button class="border flex flex-row justify-center items-center" @click="$emit('click')">
+    <button class="border flex flex-row justify-center items-center" :class="disabled ? 'text-gray-300' : ''" @click="$emit('click')" :disabled="disabled">
       <span :class="icon"></span>
     </button>
   </template>
 
   <template id="text-button">
-    <div class="flex flex-row items-center p-1 h-12 items-stretch relative">
-      <div v-if="disabled" class="absolute top-0 left-0 h-full w-full bg-gray-500 bg-opacity-20"></div>
+    <div class="flex flex-row items-center p-1 h-12 items-stretch" :class="disabled ? 'text-gray-300' : ''">
       <button class="border flex-1 flex flex-row justify-center items-center" @click="$emit('click')" :class="buttonClass">
         <slot></slot>
       </button>
@@ -436,9 +436,8 @@
   </template>
 
   <template id="button-with-label">
-    <div class="flex flex-row items-center p-1 h-12 relative">
-      <div v-if="disabled" class="absolute top-0 left-0 h-full w-full bg-gray-500 bg-opacity-20"></div>
-      <button class="flex-none w-10 flex flex-row justify-center h-full items-center border" @click="$emit('click')">
+    <div class="flex flex-row items-center p-1 h-12" :class="disabled ? 'text-gray-300' : ''">
+      <button class="flex-none w-10 flex flex-row justify-center h-full items-center border" @click="$emit('click')" :disabled="disabled">
         <span :class="icon"></span>
       </button>
       <div class="flex-1 pl-1">{{ label }}</div>
@@ -446,12 +445,11 @@
   </template>
 
   <template id="select-with-action">
-    <div class="flex flex-row items-center p-1 h-12 relative">
-      <div v-if="disabled" class="absolute top-0 left-0 h-full w-full bg-gray-500 bg-opacity-20"></div>
+    <div class="flex flex-row items-center p-1 h-12" :class="disabled ? 'text-gray-300' : ''">
       <select :label="label" class="h-full flex-1 border" :value="value" @input="$emit('input', $event.target.value)" :disabled="disabled">
         <option v-for="item,i in options" :key="i" :value="item[valueKey]">{{ item[displayKey] }}</option>
       </select>
-      <button-only :icon="actionIcon" class="w-10 h-full ml-1" @click="$emit('action')"></button-only>
+      <button-only :icon="actionIcon" class="w-10 h-full ml-1" :disabled="disabled" @click="$emit('action')"></button-only>
     </div>
   </template>
 
