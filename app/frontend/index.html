@@ -145,7 +145,7 @@
         <div class="flex-1 flex flex-col">
           <div class="flex-1 flex flex-row overflow-auto">
             <!-- state -->
-            <div class="flex-1">
+            <div class="flex-1 flex flex-row justify-center">
               <svg class="w-full max-h-full" :view-box.camel="getMazeViewBox(...selectedPlayer.setup.maze_size)" v-if="selectedPlayer.states.length > 0">
                 <rect v-for="(loc,i) in getMazePadLoc(...selectedPlayer.setup.maze_size)" :key="`box-${i}`" :x="loc[0]" :y="loc[1]" :width="mazeSettings.unit" :height="mazeSettings.unit" class="maze-pad"></rect>
                 <circle v-for="(loc,i) in selectedPlayer.states[selectedPlayer.historyDisplay].food_locations" :key="`food-${i}`" :cx="getCoord(loc[0])" :cy="getCoord(loc[1])" :r="snakeDotR" class="snake-food"></circle>
@@ -166,7 +166,16 @@
               </svg>
             </div>
             <!-- search tree -->
-            <div class="flex-1"></div>
+            <div class="flex-1 overflow-auto relative flex flex-col">
+              <div class="flex-1 overflow-auto">
+                <search-tree ref="stsvg"  v-if="selectedPlayer.searchTrees.length > 0" :width="`${searchTreeWidthPercentage.current}%`" :tree="selectedPlayer.searchTrees[selectedPlayer.historyDisplay]"></search-tree>
+              </div>
+              <div class="p-1 text-xl self-center">
+                <button class="ri-zoom-out-line p-1" @click="searchTreeWidthPercentage.current = Math.max(searchTreeWidthPercentage.min, searchTreeWidthPercentage.current - 5)"></button>
+                <button class="ri-record-circle-line p-1" @click="searchTreeWidthPercentage.current = 100"></button>
+                <button class="ri-zoom-in-line p-1" @click="searchTreeWidthPercentage.current = Math.min(searchTreeWidthPercentage.max, searchTreeWidthPercentage.current + 5)"></button>
+              </div>
+            </div>
           </div>
           <!-- solution -->
           <div class="flex-none text-center flex flex-row overflow-auto justify-center">
@@ -518,6 +527,84 @@
       </div>
     </div>
   </template>
+
+  <template id="search-tree-template">
+    <svg :width="width" :view-box.camel="view_box">
+      <svg:style>
+        .expseq { font: normal 10px sans-serif; }
+      </svg:style>
+      <template v-for="layer,l in tree_array.slice(0,tree_array.length-1)">
+        <template v-for="node,n in layer.flat(2)">
+          <!-- node frame -->
+          <rect :key="'node-'+l+'-'+n" 
+            :x="node_x[l][n]"
+            :y="l*(node_height+link_height)"
+            :width="node_width"
+            :height="node_height"
+            v-if="!(node < 1)"
+            stroke="gray"
+            fill="white"
+          ></rect>
+          <!-- node text -->
+          <text v-if="!(node < 1)" :key="'nodelabel-'+l+'-'+n"
+            :x="node_x[l][n] + .5*node_width"
+            :y="l*(node_height+link_height) + .5*node_height"
+            font-weight="thin"
+            :font-size="`${font_size.state}px`"
+            dominant-baseline="middle" text-anchor="middle"
+          >{{ node.state }}</text>
+          <!-- expansion sequence -->
+          <text v-if="!(node < 1) && (node.expansionsequence > 0)" :key="'nodelabel-expseq-'+l+'-'+n"
+            :x="node_x[l][n] + .5*node_width + .75*node_width"
+            :y="l*(node_height+link_height) + .5*node_height"
+            font-weight="thin"
+            dominant-baseline="middle" text-anchor="middle"
+            class="expseq"
+          >{{ node.expansionsequence }}</text>
+          <!-- expansion sequence frame -->
+          <circle v-if="!(node < 1) && (node.expansionsequence > 0)"  :key="'nodelabel-expseq-circle-'+l+'-'+n"
+            :cx="node_x[l][n] + .5*node_width + .75*node_width"
+            :cy="l*(node_height+link_height) + .5*node_height"
+            :r=".2*node_width"
+            fill="none"
+            stroke="#009688"
+          ></circle>
+          <!-- removed -->
+          <line v-if="node.removed" stroke="red" stroke-width="3"
+            :x1="node_x[l][n] - .1*node_width"
+            :y1="l*(node_height+link_height) - .1*node_height"
+            :x2="node_x[l][n] + node_width + .1*node_width" 
+            :y2="l*(node_height+link_height) + node_height + .1*node_height"
+          ></line>
+          <line v-if="node.removed" stroke="red" stroke-width="3"
+            :x1="node_x[l][n] + node_width + .1*node_width"
+            :y1="l*(node_height+link_height) - .1*node_height"
+            :x2="node_x[l][n] - .1*node_width" 
+            :y2="l*(node_height+link_height) + node_height + .1*node_height"
+          ></line>
+          <!-- connection -->
+          <line v-if="(l > 0) && !(node < 1)" :key="'link-'+l+'-'+n" 
+            :x1="linkage[l-1][n].parent_loc+.5*node_width"
+            :y1="(l-1)*(node_height+link_height)+node_height"
+            :x2="linkage[l-1][n].child_loc+.5*node_width"
+            :y2="l*(node_height+link_height)"
+            stroke="gray"
+          />
+          <!-- actions -->
+          <text v-if="(l > 0) && !(node < 1)" :key="'linklabel-'+l+'-'+n"
+            :x="(linkage[l-1][n].parent_loc+linkage[l-1][n].child_loc)/2 + .5*node_width"
+            :y="l*(node_height+link_height) - .5*link_height"
+            stroke="white"
+            stroke-width=".5pt"
+            font-weight="900"
+            :font-size="`${font_size.action}px`"
+            dominant-baseline="middle" text-anchor="middle"
+          >{{ linkage[l-1][n].label }}</text>
+        </template>
+      </template>
+    </svg>
+  </template>
+
   <script src="./frontend/index.js"></script>
 </body>
 </html>

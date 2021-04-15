@@ -19,6 +19,127 @@ Vue.component("select-with-action", {
   template: "#select-with-action",
   props: ["disabled", "label", "value", "action-icon", "options", "value-key", "display-key"]
 });
+Vue.component('search-tree', {
+  template: "#search-tree-template",
+  props: {
+    width: {
+      type: String,
+      default: "100%"
+    },
+    tree: {
+      type: Array,
+      default: []
+    },
+    font: {
+      type: Object,
+      default: () => ({
+        state: 12,
+        action: 10
+      }),
+    },
+    dimension: {
+      type: Object,
+      default: () => ({
+        node_height: 50,
+        node_width: 50,
+        link_height: 50,
+        node_sep: 50
+      })
+    }
+  },
+  data: function () {
+    return { }
+  },
+  computed: {
+    font_size: function () {
+      return {
+        state: this.font && this.font.state ? this.font.state == "" ? 12 : this.font.state : 12,
+        action: this.font && this.font.action ? this.font.action == "" ? 10 : this.font.action : 10,
+      }
+    },
+    node_height: function () {
+      return this.dimension && this.dimension.node_height ? isNaN(this.dimension.node_height) || Number(this.dimension.node_height) < 10 ? 50 : Number(this.dimension.node_height) : 50;
+    },
+    node_width: function () {
+      return this.dimension && this.dimension.node_width ? isNaN(this.dimension.node_width) || Number(this.dimension.node_width) < 10 ? 50 : Number(this.dimension.node_width) : 50;
+    },
+    link_height: function () {
+      return this.dimension && this.dimension.link_height ? isNaN(this.dimension.link_height) || Number(this.dimension.link_height) < 10 ? 50 : Number(this.dimension.link_height) : 50;
+    },
+    node_sep: function () {
+      return this.dimension && this.dimension.node_sep ? isNaN(this.dimension.node_sep) || Number(this.dimension.node_sep) < 10 ? 50 : Number(this.dimension.node_sep) : 50;
+    },
+    tree_array: function () {
+      let st_arr = [];
+      if (this.tree && this.tree.length > 0) {
+        st_arr.push([[this.tree.find(v => !v.parent)]]);
+        while (!st_arr[st_arr.length - 1].every(arr => arr.every(v => v < 1))) {
+          st_arr.push(
+            st_arr[st_arr.length - 1].flat()
+            .map(n => n < 1 ?
+                [n - 1]
+                : (n.children.length == 0 ? [0] : n.children.map(i => this.tree.find(v => v.id == i)).filter(v => v !== undefined))
+            )
+          );
+        }
+      }
+      return st_arr;
+    },
+    view_box: function () {
+      let vb = "0 0 0 0";
+      if (this.tree_array.length > 0) {
+        let width = 
+          this.tree_array[this.tree_array.length - 1].length * this.node_width
+          + (this.tree_array[this.tree_array.length - 1].length - 1) * this.node_sep + 10 + .5*this.node_width + .1*this.node_width;
+        let height = 
+          (this.tree_array.length - 1)* this.node_height
+          + (this.tree_array.length - 2) * this.link_height + 10 + this.node_height + .1*this.node_height;
+        vb = [-.1*this.node_width, -5-.1*this.node_height, width, height].join(" ");
+      } else {
+        vb = [0, 0, this.node_width, this.node_height].join(" ");
+      }
+      return vb;
+    },
+    node_x: function () {
+      let x = [];
+      if (this.tree_array.length > 0) {
+        x.push(this.tree_array[this.tree_array.length - 2].flat().map((node,n) => n * (this.node_width + this.node_sep) + 5));
+        for ( let i = this.tree_array.length - 3; i > -1; i-- ) {
+          x.push(
+            this.tree_array[i].flat().map((node,n) => {
+              let first_child_idx = this.tree_array[i+1].slice(0,n).reduce((acc,curr) => acc + curr.length, 0);
+              let last_child_idx = first_child_idx + this.tree_array[i+1][n].length - 1;
+              return (x[x.length - 1][first_child_idx] + x[x.length - 1][last_child_idx])/2;
+            })
+          );
+        }
+      }
+      return x.reverse();
+    },
+    linkage: function () {
+      let links = [];
+      if (this.tree_array.length > 0) {
+        for ( let i = this.tree_array.length - 2; i > 0; i-- ) {
+          links.push(
+            this.tree_array[i].flatMap((siblings,s) => {
+              let parent = this.node_x[i-1][s];
+              let parent_node = this.tree_array[i-1].flat()[s];
+              return siblings.map((node,n) => {
+                let node_idx = this.tree_array[i].slice(0,s).reduce((acc,curr) => acc + curr.length, 0) + n;
+                return {
+                  parent_loc: parent,
+                  child_loc: this.node_x[i][node_idx],
+                  label: parent_node.actions ? parent_node.actions[n] : ''
+                }
+              });
+            })
+          );
+        }
+      }
+      return links.reverse();
+    },
+  }
+});
 
 // initiation of Vue app
 var vm = new Vue({
@@ -86,6 +207,11 @@ var vm = new Vue({
       gameControls: false,
       searchTrees: true
     },
+    searchTreeWidthPercentage: {
+      current: 100,
+      min: 10,
+      max: 1000
+    }
   },
   computed: {
     settingsModified: function () {
