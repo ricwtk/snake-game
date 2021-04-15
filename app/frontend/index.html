@@ -137,6 +137,7 @@
         <span class="flex-1">Solutions and search trees</span>
         <button class="ri-close-line" @click="overlay.searchTrees = false"></button>
       </div>
+      <div class="mb-2 flex flex-row justify-center">Step {{ selectedPlayer.historyDisplay + 1 }}</div>
       <div class="flex-1 flex flex-row items-stretch overflow-auto">
         <button class="flex-none ri-arrow-left-s-line flex flex-row items-center px-2 m-1" 
           :disabled="selectedPlayer.historyDisplay <= 0" 
