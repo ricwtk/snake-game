@@ -64,13 +64,16 @@ var vm = new Vue({
       value: "",
       label: ""
     }],
-    selectedPlayer: {
-      folder: "",
-      socket: null,
-      states: [],
-      solutions: [],
-      searchTrees: []
-    },
+    // selectedPlayer: {
+    //   folder: "",
+    //   socket: null,
+    //   setup: {},
+    //   states: [],
+    //   solutions: [],
+    //   searchTrees: [],
+    //   historyDisplay: 0
+    // },
+    selectedPlayer: {"folder":"tests","socket":null,"setup":{"maze_size":[10,10],"static_snake_length":false},"states":[{"snake_locations":[[0,5]],"current_direction":"e","food_locations":[[8,9],[5,1]]}],"solutions":[["w","w","n","s","n"]],"searchTrees":[[{"id":1,"state":"0,0","expansionsequence":1,"children":[2,3,4],"actions":["n","w","e"],"removed":false,"parent":null},{"id":2,"state":"5,0","expansionsequence":2,"children":[5,6,7],"actions":["n","s","w"],"removed":false,"parent":1},{"id":3,"state":"0,3","expansionsequence":-1,"children":[],"actions":[],"removed":false,"parent":1},{"id":4,"state":"0,4","expansionsequence":-1,"children":[],"actions":[],"removed":false,"parent":1},{"id":5,"state":"5,0","expansionsequence":-1,"children":[],"actions":[],"removed":true,"parent":2},{"id":6,"state":"5,3","expansionsequence":-1,"children":[],"actions":[],"removed":false,"parent":2},{"id":7,"state":"1,0","expansionsequence":-1,"children":[],"actions":[],"removed":false,"parent":2}]],"historyDisplay":0},
     snakeLength: 0,
     snakeDotR: 10,
     snakeDotDirScale: 0.5,
@@ -80,42 +83,14 @@ var vm = new Vue({
     failedFace: 0,
     numberOfFailedFace: 7,
     overlay: {
-      gameControls: false
+      gameControls: false,
+      searchTrees: true
     },
   },
   computed: {
     settingsModified: function () {
       return JSON.stringify(this.settings.displayed) !== JSON.stringify(this.settings.saved);
     },
-    mazePadLoc: function () {
-      let locs = [];
-      [...Array(this.settings.saved.mazeCol).keys()].forEach((cval,cidx,carr) => {
-        [...Array(this.settings.saved.mazeRow).keys()].forEach((rval,ridx,rarr) => {
-          locs.push([cval * this.mazeSettings.unit + Math.max(cval + 1, 0) * this.mazeSettings.gap, rval * this.mazeSettings.unit + Math.max(rval + 1, 0) * this.mazeSettings.gap]);
-        });
-      });
-      return locs;
-    },
-    mazeViewBox: function () {
-      return [
-        0, 0, 
-        this.settings.saved.mazeCol * this.mazeSettings.unit + Math.max(this.settings.saved.mazeCol + 1, 0) * this.mazeSettings.gap, 
-        this.settings.saved.mazeRow * this.mazeSettings.unit + Math.max(this.settings.saved.mazeRow + 1, 0) * this.mazeSettings.gap
-      ];
-    },
-    snakeColors: function () {
-      return this.snakeLocations.map((val,idx,arr) => Math.ceil((arr.length-idx)/arr.length *10)*10);
-    },
-    snakeDotDir: function () {
-      return this.snakeLocations.map((val,idx,arr) => {
-        if (idx == 0) {
-          return this.moveDir;
-        } else {
-          let delta = JSON.stringify([arr[idx-1][0] - val[0], arr[idx-1][1] - val[1]]);
-          return this.allDirs[ this.dirOperations.map(x => JSON.stringify(x)).indexOf(delta) ];
-        }
-      });
-    }
   },
   mounted: function () {
     this.settings.saved = Object.assign({}, this.settings.saved, this.settings.displayed);
@@ -192,8 +167,38 @@ var vm = new Vue({
     }
   },
   methods: {
+    getMazeViewBox: function (row, col) {
+      return [
+        0, 0, 
+        col * this.mazeSettings.unit + Math.max(col + 1, 0) * this.mazeSettings.gap, 
+        row * this.mazeSettings.unit + Math.max(row + 1, 0) * this.mazeSettings.gap
+      ];
+    },
+    getMazePadLoc: function (row, col) {
+      let locs = [];
+      [...Array(col).keys()].forEach((cval,cidx,carr) => {
+        [...Array(row).keys()].forEach((rval,ridx,rarr) => {
+          locs.push([cval * this.mazeSettings.unit + Math.max(cval + 1, 0) * this.mazeSettings.gap, rval * this.mazeSettings.unit + Math.max(rval + 1, 0) * this.mazeSettings.gap]);
+        });
+      });
+      return locs;
+    },
+    getSnakeColor: function (fullLength, index) {
+      return Math.ceil((fullLength-index)/fullLength *10)*10;
+    },
+    getSnakeDotDirs: function (locations, firstDir) {
+      return locations.map((val,idx,arr) => {
+        if (idx == 0) {
+          return firstDir;
+        } else {
+          let delta = JSON.stringify([arr[idx-1][0] - val[0], arr[idx-1][1] - val[1]]);
+          return this.allDirs[ this.dirOperations.map(x => JSON.stringify(x)).indexOf(delta) ];
+        }
+      });
+    },
     initialiseGame: function () {
       this.controls.play = false;
+      this.moveDir = "e";
       this.setSnakeInitialLocations();
       this.foodLocations.splice(0, this.foodLocations.length);
       [...Array(this.settings.saved.foodNumber).keys()].forEach(() => this.generateFoodLocation());
@@ -264,17 +269,11 @@ var vm = new Vue({
     getCoord: function (idx) {
       return this.mazeSettings.unit/2 + idx * this.mazeSettings.unit + Math.max(idx+1,0) * this.mazeSettings.gap;
     },
-    showtrees: function () {
-      console.log("showing search trees");
-    },
     saveSettings: function () { 
       this.settings.saved = Object.assign({}, this.settings.saved, this.settings.displayed); 
       this.initialiseGame();
     },
     discardSettings: function () { this.settings.displayed = Object.assign({}, this.settings.displayed, this.settings.saved); },
-    nextStep: function () {
-      console.log("next step");
-    },
     keyboardControl: function (key) {
       if (key == "p") {
         if (this.failed) { this.initialiseGame(); }
@@ -343,6 +342,7 @@ var vm = new Vue({
     initiateAgent: function () {
       this.selectedPlayer.socket = new WebSocket(`ws://${location.host}/select-player/${this.selectedPlayer.folder}`);
       this.selectedPlayer.socket.onopen = (ev) => {
+        this.selectedPlayer.setup = {};
         this.selectedPlayer.states = [];
         this.selectedPlayer.solutions = [];
         this.selectedPlayer.searchTrees = [];
@@ -357,12 +357,13 @@ var vm = new Vue({
         } else if (data.purpose == "player check") {
           if (data.err) { this.logs.push(data.data); }
           else { this.logs.push(`Player ${data.data.name} module is available`); }
+          this.selectedPlayer.setup = {
+            maze_size: [this.settings.saved.mazeRow, this.settings.saved.mazeCol],
+            static_snake_length: this.settings.saved.staticLength
+          };
           ev.target.send(JSON.stringify({
             purpose: "setup",
-            data: {
-              maze_size: [this.settings.saved.mazeRow, this.settings.saved.mazeCol],
-              static_snake_length: this.settings.saved.staticLength
-            }
+            data: this.selectedPlayer.setup
           }));
         } else if (data.purpose == "initiation") {
           if (data.err) { this.logs.push(data.data); }
