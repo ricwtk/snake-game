@@ -205,7 +205,7 @@ var vm = new Vue({
     numberOfFailedFace: 7,
     overlay: {
       gameControls: false,
-      searchTrees: true
+      searchTrees: false
     },
     searchTreeWidthPercentage: {
       current: 100,

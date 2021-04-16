@@ -6,8 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-  <link href='https://css.gg/css' rel='stylesheet'>
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css" rel="stylesheet">
   <style>
     .collapsed { transform: scale(0); }
     .expanded { transform: scale(1); }
@@ -57,10 +56,10 @@
     >
       <div class="border-b mb-3 flex flex-row flex-0 text-2xl pb-2">
         <span class="flex-1">Game controls</span>
-        <button class="ri-close-line" @click="overlay.gameControls = false"></button>
+        <button class="mdi mdi-close" @click="overlay.gameControls = false"></button>
       </div>
       <div class="overflow-auto flex-1 flex flex-col">
-        <button-with-label icon="ri-user-line">Human</button-with-label>
+        <button-with-label icon="mdi-account-outline">Human</button-with-label>
         <div class="ml-5">Snake is controlled with keyboard. Click to switch to agent mode.</div>
         <div class="text-center">
           <svg viewBox="-50 -48 150 100" width="200px" class="inline">
@@ -75,38 +74,38 @@
           </svg>
         </div>
         <hr class="my-3">
-        <button-with-label icon="ri-skull-2-line">Agent</button-with-label>
+        <button-with-label icon="mdi-robot-outline">Agent</button-with-label>
         <div class="ml-5">Snake is controlled by AI agent. Click to switch to human mode. Select the agent from dropdown list.</div>
         <hr class="my-3">
         <select-with-action class="w-1/3" label="Choose player"
-          action-icon="ri-refresh-line" 
+          action-icon="mdi-sync" 
           :options="[{name: 'player1'}, {name: 'player2'}]"
           value="player1"
           value-key="name"
           display-key="name"
         ></select-with-action>
-        <div class="ml-5">Only available in <i class="ri-skull-2-line"></i>. Select agent from dropdown list. Click <button-only icon="ri-refresh-line" style="display:inline" class="w-10"></button-only> to refresh list of agents.</div>
+        <div class="ml-5">Only available in <i class="mdi mdi-robot-outline"></i>. Select agent from dropdown list. Click <button-only icon="mdi-sync" style="display:inline" class="w-10"></button-only> to refresh list of agents.</div>
         <hr class="my-3">
-        <button-with-label icon="ri-play-line">Paused</button-with-label>
+        <button-with-label icon="mdi-play-outline">Paused</button-with-label>
         <div class="ml-5">Game is paused or uninitiated. Click to start or resume the game. Keyboard shortcut: <kbd>P</kbd></div>
-        <div class="ml-5">[<i class="ri-user-line"></i>] The game starts with snake moving at x steps per second as configured. Keyboard controls for snake direction are enabled.</div>
-        <div class="ml-5">[<i class="ri-skull-2-line"></i>] The selected agent is initialised. The latest game states are sent to the agent. The game waits for solution and search tree from the agent.</div>
+        <div class="ml-5">[<i class="mdi mdi-account-outline"></i>] The game starts with snake moving at x steps per second as configured. Keyboard controls for snake direction are enabled.</div>
+        <div class="ml-5">[<i class="mdi mdi-robot-outline"></i>] The selected agent is initialised. The latest game states are sent to the agent. The game waits for solution and search tree from the agent.</div>
         <hr class="my-3">
-        <button-with-label icon="ri-pause-line">Playing</button-with-label>
+        <button-with-label icon="mdi-pause">Playing</button-with-label>
         <div class="ml-5">Game is running. Click to pause the game. Keyboard shortcut: <kbd>P</kbd></div>
-        <div class="ml-5">[<i class="ri-user-line"></i>] The game is paused at that instance. Arrow keys cannot be used to change the direction.</div>
-        <div class="ml-5">[<i class="ri-skull-2-line"></i>] The game is paused after receiving the solution from the agent. Upon resuming, only then the latest game states are sent to the agent.</div>
+        <div class="ml-5">[<i class="mdi mdi-account-outline"></i>] The game is paused at that instance. Arrow keys cannot be used to change the direction.</div>
+        <div class="ml-5">[<i class="mdi mdi-robot-outline"></i>] The game is paused after receiving the solution from the agent. Upon resuming, only then the latest game states are sent to the agent.</div>
         <hr class="my-3">
-        <button-with-label icon="ri-restart-line">Reset</button-with-label>
+        <button-with-label icon="mdi-refresh">Reset</button-with-label>
         <div class="ml-5">Click to reset the game. Keyboard shortcut: <kbd>R</kbd></div>
-        <div class="ml-5">[<i class="ri-user-line"></i>] The game states are reset.</div>
-        <div class="ml-5">[<i class="ri-skull-2-line"></i>] The game states are reset.</div>
+        <div class="ml-5">[<i class="mdi mdi-account-outline"></i>] The game states are reset.</div>
+        <div class="ml-5">[<i class="mdi mdi-robot-outline"></i>] The game states are reset.</div>
         <hr class="my-3">
-        <button-with-label icon="ri-arrow-right-s-line">Step-by-step</button-with-label>
-        <div class="ml-5">Only available in <i class="ri-skull-2-line"></i>. The game will only proceed when <text-button class="p-1" style="display:inline">Next step</text-button> is clicked. Click to switch to automatic progression.</div>
+        <button-with-label icon="mdi-chevron-right">Step-by-step</button-with-label>
+        <div class="ml-5">Only available in <i class="mdi mdi-robot-outline"></i>. The game will only proceed when <text-button class="p-1" style="display:inline">Next step</text-button> is clicked. Click to switch to automatic progression.</div>
         <hr class="my-3">
-        <button-with-label icon="ri-arrow-right-s-line">Automatic progression</button-with-label>
-        <div class="ml-5">Only available in <i class="ri-skull-2-line"></i>. The game will automatically proceed when solution is received from agent. Click to switch to step by step progression.</div>
+        <button-with-label icon="mdi-chevron-triple-right">Automatic progression</button-with-label>
+        <div class="ml-5">Only available in <i class="mdi mdi-robot-outline"></i>. The game will automatically proceed when solution is received from agent. Click to switch to step by step progression.</div>
         <hr class="my-3">
         <div class="mx-1">Moving speed: <b>x</b> step per second</div>
         <div class="flex flex-row">
@@ -114,7 +113,7 @@
           <div class="flex-1"></div>
           <div class="flex-1"></div>
         </div>
-        <div class="ml-5">Only available in <i class="ri-user-line"></i>. Snake will progress with x step per second.</div>
+        <div class="ml-5">Only available in <i class="mdi mdi-account-outline"></i>. Snake will progress with x step per second.</div>
         <div class="ml-5">At 0 step per second, snake will move one step for each valid keyboard input.</div>
         <hr class="my-3">
         <div class="mx-1">Animation speed: <b>x</b> step per second</div>
@@ -123,10 +122,10 @@
           <div class="flex-1"></div>
           <div class="flex-1"></div>
         </div>
-        <div class="ml-5">Only available in <i class="ri-skull-2-line"></i>. This controls the animation speed of the snake when solution is provided by the agent.</div>
+        <div class="ml-5">Only available in <i class="mdi mdi-robot-outline"></i>. This controls the animation speed of the snake when solution is provided by the agent.</div>
         <hr class="my-3">
-        <button-with-label icon="ri-organization-chart">Show search trees</button-with-label>
-        <div class="ml-5">Only available in <i class="ri-skull-2-line"></i>. Click to show the search tree generated by the agent during the search for solution.</div>
+        <button-with-label icon="mdi-family-tree">Show search trees</button-with-label>
+        <div class="ml-5">Only available in <i class="mdi mdi-robot-outline"></i>. Click to show the search tree generated by the agent during the search for solution.</div>
       </div>
     </overlay>
     <!-- search tree overlay -->
@@ -135,11 +134,11 @@
       @bg-click="overlay.searchTrees = false">
       <div class="border-b mb-3 flex flex-row flex-0 text-2xl pb-2">
         <span class="flex-1">Solutions and search trees</span>
-        <button class="ri-close-line" @click="overlay.searchTrees = false"></button>
+        <button class="mdi mdi-close" @click="overlay.searchTrees = false"></button>
       </div>
       <div class="mb-2 flex flex-row justify-center">Step {{ selectedPlayer.historyDisplay + 1 }}</div>
       <div class="flex-1 flex flex-row items-stretch overflow-auto">
-        <button class="flex-none ri-arrow-left-s-line flex flex-row items-center px-2 m-1" 
+        <button class="flex-none mdi mdi-chevron-left flex flex-row items-center px-2 m-1" 
           :disabled="selectedPlayer.historyDisplay <= 0" 
           :class="selectedPlayer.historyDisplay <= 0 ? 'text-gray-300' : ''"
           @click="selectedPlayer.historyDisplay -= 1"></button>
@@ -172,9 +171,9 @@
                 <search-tree ref="stsvg"  v-if="selectedPlayer.searchTrees.length > 0" :width="`${searchTreeWidthPercentage.current}%`" :tree="selectedPlayer.searchTrees[selectedPlayer.historyDisplay]"></search-tree>
               </div>
               <div class="p-1 text-xl self-center">
-                <button class="ri-zoom-out-line p-1" @click="searchTreeWidthPercentage.current = Math.max(searchTreeWidthPercentage.min, searchTreeWidthPercentage.current - 5)"></button>
-                <button class="ri-record-circle-line p-1" @click="searchTreeWidthPercentage.current = 100"></button>
-                <button class="ri-zoom-in-line p-1" @click="searchTreeWidthPercentage.current = Math.min(searchTreeWidthPercentage.max, searchTreeWidthPercentage.current + 5)"></button>
+                <button class="mdi mdi-magnify-minus-outline p-1" @click="searchTreeWidthPercentage.current = Math.max(searchTreeWidthPercentage.min, searchTreeWidthPercentage.current - 5)"></button>
+                <button class="mdi mdi-magnify-remove-outline p-1" @click="searchTreeWidthPercentage.current = 100"></button>
+                <button class="mdi mdi-magnify-plus-outline p-1" @click="searchTreeWidthPercentage.current = Math.min(searchTreeWidthPercentage.max, searchTreeWidthPercentage.current + 5)"></button>
               </div>
             </div>
           </div>
@@ -182,12 +181,12 @@
           <div class="flex-none text-center flex flex-row overflow-auto justify-center">
             <span v-for="sol,si in selectedPlayer.solutions[selectedPlayer.historyDisplay]"
               :key="si"
-              :class="sol == 'n' ? 'ri-arrow-up-s-line' : sol == 's' ? 'ri-arrow-down-s-line' : sol == 'w' ? 'ri-arrow-left-s-line' : sol == 'e' ? 'ri-arrow-right-s-line' : 'ri-question-mark'"
-              class="text-2xl mx-2"
+              :class="sol == 'n' ? 'mdi-chevron-up' : sol == 's' ? 'mdi-chevron-down' : sol == 'w' ? 'mdi-chevron-left' : sol == 'e' ? 'mdi-chevron-right' : 'mdi-help'"
+              class="text-2xl mx-2 mdi"
             ></span>
           </div>
         </div>
-        <button class="flex-none ri-arrow-right-s-line flex flex-row items-center px-2 m-1"
+        <button class="flex-none mdi mdi-chevron-right flex flex-row items-center px-2 m-1"
           :disabled="selectedPlayer.historyDisplay >= selectedPlayer.solutions.length - 1" 
           :class="selectedPlayer.historyDisplay >= selectedPlayer.solutions.length - 1 ? 'text-gray-300' : ''"
           @click="selectedPlayer.historyDisplay += 1"></button>
@@ -395,39 +394,39 @@
       <!-- controls -->
       <div class="w-full flex-none text-gray-100 p-1 cursor-pointer flex flex-row bg-gray-500" @click="showControls = !showControls">
         <span class="flex-1">Controls</span>
-        <i :class="showControls ? 'ri-arrow-down-s-line' : 'ri-arrow-left-s-line'"></i>
+        <i :class="showControls ? 'mdi-chevron-down' : 'mdi-chevron-left'" class="mdi"></i>
       </div>
       <div class="w-full overscroll-contain overflow-auto flex flex-col border-b transition-all origin-top" :class="showControls ? 'flex-1 expanded-y' : 'flex-0 h-0 collapsed-y'">
         <!-- control buttons -->
-        <text-button @click="overlay.gameControls = true"><i class="ri-question-line"></i>&nbsp;Info for game controls</text-button>
+        <text-button @click="overlay.gameControls = true"><i class="mdi mdi-help-circle-outline"></i>&nbsp;Info for game controls</text-button>
         <button-with-label 
-          :icon="controls.manual ? 'ri-user-line' : 'ri-skull-2-line'"
+          :icon="controls.manual ? 'mdi-account-outline' : 'mdi-robot-outline'"
           @click="controls.manual=!controls.manual">
           {{ controls.manual ? 'Human' : 'Agent' }}
         </button-with-label>
         <select-with-action label="Choose player" 
           v-model="selectedPlayer.folder" 
           :disabled="controls.manual" 
-          action-icon="ri-refresh-line" 
+          action-icon="mdi-sync" 
           @action="getPlayerList"
           :options="playerList"
           value-key="folder"
           display-key="name"
         ></select-with-action>
         <button-with-label 
-          :icon="controls.play ? 'ri-pause-line' : 'ri-play-line'"
+          :icon="controls.play ? 'mdi-pause' : 'mdi-play-outline'"
           @click="controls.play=!controls.play">
           {{ controls.play ? 'Playing' : 'Paused' }}
-          <i v-if="controls.play" class="ml-1 absolute ri-loader-5-line animate-spin"></i>
+          <i v-if="controls.play" class="ml-1 absolute mdi mdi-loading animate-spin"></i>
         </button-with-label>
         <button-with-label 
           :disabled="controls.play"
-          icon="ri-restart-line"
+          icon="mdi-refresh"
           @click="initialiseGame">
           Reset
         </button-with-label>
         <button-with-label :disabled="controls.manual || failed"
-          :icon="controls.stepping ? 'ri-arrow-right-s-line' : 'ri-speed-line'"
+          :icon="controls.stepping ? 'mdi-chevron-right' : 'mdi-chevron-triple-right'"
           @click="controls.stepping=!controls.stepping">
           {{ controls.stepping ? 'Step-by-step' : 'Automatic progression' }}
         </button-with-label>
@@ -438,7 +437,7 @@
           <input v-else type="range"  :disabled="controls.play" class="flex-1 mx-1 p-1" v-model="controls.animation.current" min="1" :max="controls.animation.max"/>
         </div>
         <button-with-label :disabled="controls.manual || selectedPlayer.states.length <= 0"
-          icon="ri-organization-chart"
+          icon="mdi-family-tree"
           @click="overlay.searchTrees = true">
           Show search trees
         </button-with-label>
@@ -447,22 +446,22 @@
       <!-- settings -->
       <div class="w-full flex-none text-gray-100 p-1 cursor-pointer flex flex-row bg-gray-500" @click="showControls = !showControls">
         <span class="flex-1">Game Settings</span> 
-        <i :class="!showControls ? 'ri-arrow-down-s-line' : 'ri-arrow-left-s-line'"></i>
+        <i :class="!showControls ? 'mdi-chevron-down' : 'mdi-chevron-left'" class="mdi"></i>
       </div>
       <div class="w-full overscroll-contain overflow-auto flex flex-col relative border-b transition-all origin-bottom" :class="showControls ? 'flex-0 h-0 collapsed' : 'flex-1 expanded'">
         <div class="absolute bottom-0 w-full flex flex-row p-1 bg-red-500" v-if="settingsModified">
           <div class="text-gray-100 flex-1">Save modified settings? Game will be reset.</div>
-          <button-only icon="ri-check-line" class="flex-none mr-1 w-8 bg-gray-100" @click="saveSettings"></button-only>
-          <button-only icon="ri-close-line" class="flex-none text-black w-8 bg-gray-100" @click="discardSettings"></button-only>
+          <button-only icon="mdi-check" class="flex-none mr-1 w-8 bg-gray-100" @click="saveSettings"></button-only>
+          <button-only icon="mdi-close" class="flex-none text-black w-8 bg-gray-100" @click="discardSettings"></button-only>
         </div>
         <div class="pt-1 mx-1">Maze size</div>
-        <div class="flex flex-row h-10 mx-1 mb-1">
+        <div class="flex flex-row h-10 mx-1 mb-1 items-center">
           <input type="number" v-model.number="settings.displayed.mazeRow" class="flex-1 w-0 border p-1" min="1">
           <div class="flex-none mx-2">&times;</div>
           <input type="number" v-model.number="settings.displayed.mazeCol" class="flex-1 w-0 border p-1" min="1">
         </div>
         <button-with-label class="pt-2"
-          :icon="settings.displayed.staticLength ? 'ri-separator' : 'ri-bar-chart-horizontal-line'"
+          :icon="settings.displayed.staticLength ? 'mdi-dots-horizontal' : 'mdi-pan-horizontal'"
           @click="settings.displayed.staticLength=!settings.displayed.staticLength">
           {{ settings.displayed.staticLength ? 'Fixed snake length' : 'Dynamic snake length' }}
         </button-with-label>
@@ -478,8 +477,8 @@
       <!-- log -->
       <div class="w-full flex-none text-gray-100 p-1 flex flex-row bg-gray-500">
         <span class="flex-1">Logs</span>
-        <button class="ri-chat-delete-line" @click="logs.splice(0,logs.length)"></button>
-        <button class="ml-2" :class="showLogs ? 'ri-eye-off-line' : 'ri-eye-line'" @click="showLogs=!showLogs"></button>
+        <button class="mdi mdi-chat-remove-outline" @click="logs.splice(0,logs.length)"></button>
+        <button class="ml-2 mdi" :class="showLogs ? 'mdi-eye-off-outline' : 'mdi-eye-outline'" @click="showLogs=!showLogs"></button>
       </div>
       <div class="w-full flex-1 overscroll-contain overflow-auto divide-y flex flex-col" ref="logs">
         <div v-for="(log,logidx) in logs" :key="logidx" class="p-1" v-if="showLogs" ref="log">
@@ -491,7 +490,7 @@
 
   <template id="button-only">
     <button class="border flex flex-row justify-center items-center" :class="disabled ? 'text-gray-300' : ''" @click="$emit('click')" :disabled="disabled">
-      <span :class="icon"></span>
+      <span :class="icon" class="mdi"></span>
     </button>
   </template>
 
@@ -506,7 +505,7 @@
   <template id="button-with-label">
     <div class="flex flex-row items-center p-1 h-12" :class="disabled ? 'text-gray-300' : ''">
       <button class="flex-none w-10 flex flex-row justify-center h-full items-center border" @click="$emit('click')" :disabled="disabled">
-        <span :class="icon"></span>
+        <span :class="icon" class="mdi"></span>
       </button>
       <div class="flex-1 pl-1"><slot></slot></div>
     </div>
