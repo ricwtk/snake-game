@@ -36,9 +36,9 @@ A zip file and a report.
 
 | Criteria |   %   | Remark |
 |:---------|:-----:|:-------|
-| Functional codes      | 15 | Your code should work without throwing exceptions |
+| Functional codes      | 20 | Your code should work without throwing exceptions |
 | Scored points         | 10 | This is based on the amount of points your agents/players scored during the game relative to other groups |
-| Content correctness   | 25 | The contents in your report should be correct |
+| Content correctness   | 20 | The contents in your report should be correct |
 | Content continuity    | 15 | Your report should have continuity from one section to the next section |
 | Report representation | 15 | Your report should be consistent and able to communicate the contents effectively |
 | Discussion/Analysis   | 20 | The discussion and the analysis should be clear and logical |
