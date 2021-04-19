@@ -50,7 +50,6 @@ def retrievePlayerDetails(player):
         "folder": player["folder"],
         "name": player["module"].name,
         "group": player["module"].group,
-        "icon": player["module"].icon,
         "members": player["module"].members,
         "informed": player["module"].informed
       })

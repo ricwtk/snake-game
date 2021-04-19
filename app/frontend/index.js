@@ -156,7 +156,7 @@ var vm = new Vue({
         id: null
       },
       animation: {
-        current: 1,
+        current: 5,
         max: 10,
         id: null
       }
@@ -167,7 +167,7 @@ var vm = new Vue({
         mazeCol: 10,
         staticLength: false,
         startLength: 1,
-        foodNumber: 2
+        foodNumber: 1
       },
       saved: {}
     },
@@ -185,16 +185,16 @@ var vm = new Vue({
       value: "",
       label: ""
     }],
-    // selectedPlayer: {
-    //   folder: "",
-    //   socket: null,
-    //   setup: {},
-    //   states: [],
-    //   solutions: [],
-    //   searchTrees: [],
-    //   historyDisplay: 0
-    // },
-    selectedPlayer: {"folder":"tests","socket":null,"setup":{"maze_size":[10,10],"static_snake_length":false},"states":[{"snake_locations":[[0,5]],"current_direction":"e","food_locations":[[8,9],[5,1]]}],"solutions":[["w","w","n","s","n"]],"searchTrees":[[{"id":1,"state":"0,0","expansionsequence":1,"children":[2,3,4],"actions":["n","w","e"],"removed":false,"parent":null},{"id":2,"state":"5,0","expansionsequence":2,"children":[5,6,7],"actions":["n","s","w"],"removed":false,"parent":1},{"id":3,"state":"0,3","expansionsequence":-1,"children":[],"actions":[],"removed":false,"parent":1},{"id":4,"state":"0,4","expansionsequence":-1,"children":[],"actions":[],"removed":false,"parent":1},{"id":5,"state":"5,0","expansionsequence":-1,"children":[],"actions":[],"removed":true,"parent":2},{"id":6,"state":"5,3","expansionsequence":-1,"children":[],"actions":[],"removed":false,"parent":2},{"id":7,"state":"1,0","expansionsequence":-1,"children":[],"actions":[],"removed":false,"parent":2}]],"historyDisplay":0},
+    selectedPlayer: {
+      folder: "",
+      socket: null,
+      setup: {},
+      states: [],
+      solutions: [],
+      searchTrees: [],
+      historyDisplay: 0,
+      initiated: false
+    },
     snakeLength: 0,
     snakeDotR: 10,
     snakeDotDirScale: 0.5,
@@ -472,6 +472,7 @@ var vm = new Vue({
         this.selectedPlayer.states = [];
         this.selectedPlayer.solutions = [];
         this.selectedPlayer.searchTrees = [];
+        this.selectedPlayer.initiated = false;
       };
       this.selectedPlayer.socket.onclose = (ev) => {
         this.selectedPlayer.socket = null;
@@ -494,6 +495,7 @@ var vm = new Vue({
         } else if (data.purpose == "initiation") {
           if (data.err) { this.logs.push(data.data); }
           else { 
+            this.selectedPlayer.initiated = true;
             this.logs.push(`Player ${data.data.name} is initiated`); 
             if (!this.controls.stepping) { // auto progression
               this.nextAgentStep();

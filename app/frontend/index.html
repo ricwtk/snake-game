@@ -430,7 +430,7 @@
           @click="controls.stepping=!controls.stepping">
           {{ controls.stepping ? 'Step-by-step' : 'Automatic progression' }}
         </button-with-label>
-        <text-button :disabled="controls.manual || !controls.stepping || controls.animation.id || failed || !controls.play" @click="nextAgentStep">Next step</text-button>
+        <text-button :disabled="controls.manual || !controls.stepping || controls.animation.id || failed || !controls.play || !selectedPlayer.initiated" @click="nextAgentStep">Next step</text-button>
         <div class="pt-1 mx-1" :class="controls.play ? 'text-gray-300' : ''">{{ controls.manual ? 'Moving' : 'Animation' }} speed: <span class="font-bold">{{ controls.manual ? controls.interval.current : controls.animation.current }}</span> step per second</div>
         <div class="flex flex-row pb-1">
           <input v-if="controls.manual" type="range" :disabled="controls.play" class="flex-1 mx-1 p-1" v-model="controls.interval.current" min="0" :max="controls.interval.max"/>
