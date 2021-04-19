@@ -1,0 +1,43 @@
+site_name: CSC3206 Artificial Intelligence 202104 Assignment 1
+nav:
+  - Overview: index.md
+  - Setup: setup.md
+  - UI: ui.md
+  - Game controls: controls.md
+  - Game settings: settings.md
+  - Use your script as agent/player: player.md
+  - Submission: submission.md
+theme: 
+  name: material
+  highlightjs: true
+  hljs_languages:
+    - python
+  features:
+    # - navigation.tabs
+    - toc.integrate
+    - navigation.expand
+  favicon: img/icon.png
+  logo: img/icon.png
+  palette:
+    primary: teal
+    accent: teal
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed
+  - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.highlight:
+      linenums: true
+      linenums_style: pymdownx.inline
+  - pymdownx.arithmatex:
+      generic: true
+extra_javascript:
+  - javascripts/config.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+plugins: 
+  - search
+site_dir: "../docs"

@@ -1,0 +1,773 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../img/icon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.1">
+    
+    
+      
+        <title>Use your script as agent/player - CSC3206 Artificial Intelligence 202104 Assignment 1</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.9299cb39.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ef6f36e2.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#009485">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#use-your-script-as-agentplayer" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="CSC3206 Artificial Intelligence 202104 Assignment 1" class="md-header__button md-logo" aria-label="CSC3206 Artificial Intelligence 202104 Assignment 1" data-md-component="logo">
+      
+  <img src="../img/icon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CSC3206 Artificial Intelligence 202104 Assignment 1
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Use your script as agent/player
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="CSC3206 Artificial Intelligence 202104 Assignment 1" class="md-nav__button md-logo" aria-label="CSC3206 Artificial Intelligence 202104 Assignment 1" data-md-component="logo">
+      
+  <img src="../img/icon.png" alt="logo">
+
+    </a>
+    CSC3206 Artificial Intelligence 202104 Assignment 1
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup/" class="md-nav__link">
+        Setup
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ui/" class="md-nav__link">
+        UI
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../controls/" class="md-nav__link">
+        Game controls
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../settings/" class="md-nav__link">
+        Game settings
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Use your script as agent/player
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Use your script as agent/player
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#code-location" class="md-nav__link">
+    Code location
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#code-format" class="md-nav__link">
+    Code format
+  </a>
+  
+    <nav class="md-nav" aria-label="Code format">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#class-name" class="md-nav__link">
+    Class name
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#agentplayer-information" class="md-nav__link">
+    Agent/player information
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#group-information" class="md-nav__link">
+    Group information
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#__init__-function" class="md-nav__link">
+    __init__() function
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-function" class="md-nav__link">
+    run() function
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#disclaimer-on-the-testing-player-example" class="md-nav__link">
+    Disclaimer on the testing player example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interaction-between-this-platform-and-your-agent" class="md-nav__link">
+    Interaction between this platform and your agent
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../submission/" class="md-nav__link">
+        Submission
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="use-your-script-as-agentplayer">Use your script as agent/player</h1>
+<h2 id="code-location">Code location</h2>
+<ol>
+<li>Each agent/player is a direcotry resides in <code>root directory &gt; app &gt; players</code> directory.</li>
+<li>
+<p>To create a new agent/player, create a directory in the <code>players</code> directory, for example, a directory with the name of <code>super_player</code>. The agent/player is the <code>player.py</code> file inside that directory.</p>
+<p><div style="display:flex;flex-direction:column;">
+  <div><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 18H4V8h16m0-2h-8l-2-2H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"/></svg></span> snake-game</div>
+  <div>&nbsp; <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 15-6 6-1.42-1.42L15.17 16H4V4h2v10h9.17l-3.59-3.58L13 9l6 6z"/></svg></span> <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 18H4V8h16m0-2h-8l-2-2H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"/></svg></span> app</div>
+  <div>&nbsp; <span style="opacity:0"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 15-6 6-1.42-1.42L15.17 16H4V4h2v10h9.17l-3.59-3.58L13 9l6 6z"/></svg></span></span>&nbsp; <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 15-6 6-1.42-1.42L15.17 16H4V4h2v10h9.17l-3.59-3.58L13 9l6 6z"/></svg></span> <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 18H4V8h16m0-2h-8l-2-2H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"/></svg></span> players</div>
+  <div>&nbsp; <span style="opacity:0"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 15-6 6-1.42-1.42L15.17 16H4V4h2v10h9.17l-3.59-3.58L13 9l6 6z"/></svg></span>&nbsp; <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 15-6 6-1.42-1.42L15.17 16H4V4h2v10h9.17l-3.59-3.58L13 9l6 6z"/></svg></span></span>&nbsp;  <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 15-6 6-1.42-1.42L15.17 16H4V4h2v10h9.17l-3.59-3.58L13 9l6 6z"/></svg></span> <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 18H4V8h16m0-2h-8l-2-2H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2z"/></svg></span> super_players</div>
+  <div>&nbsp; <span style="opacity:0"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 15-6 6-1.42-1.42L15.17 16H4V4h2v10h9.17l-3.59-3.58L13 9l6 6z"/></svg></span>&nbsp; <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 15-6 6-1.42-1.42L15.17 16H4V4h2v10h9.17l-3.59-3.58L13 9l6 6z"/></svg></span>&nbsp; <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 15-6 6-1.42-1.42L15.17 16H4V4h2v10h9.17l-3.59-3.58L13 9l6 6z"/></svg></span></span>&nbsp;  <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m19 15-6 6-1.42-1.42L15.17 16H4V4h2v10h9.17l-3.59-3.58L13 9l6 6z"/></svg></span> <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.14 7.5A2.86 2.86 0 0 1 22 10.36v3.78A2.86 2.86 0 0 1 19.14 17H12c0 .39.32.96.71.96H17v1.68a2.86 2.86 0 0 1-2.86 2.86H9.86A2.86 2.86 0 0 1 7 19.64v-3.75a2.85 2.85 0 0 1 2.86-2.85h5.25a2.85 2.85 0 0 0 2.85-2.86V7.5h1.18m-4.28 11.79c-.4 0-.72.3-.72.89 0 .59.32.71.72.71a.71.71 0 0 0 .71-.71c0-.59-.32-.89-.71-.89m-10-1.79A2.86 2.86 0 0 1 2 14.64v-3.78A2.86 2.86 0 0 1 4.86 8H12c0-.39-.32-.96-.71-.96H7V5.36A2.86 2.86 0 0 1 9.86 2.5h4.28A2.86 2.86 0 0 1 17 5.36v3.75a2.85 2.85 0 0 1-2.86 2.85H8.89a2.85 2.85 0 0 0-2.85 2.86v2.68H4.86M9.14 5.71c.4 0 .72-.3.72-.89 0-.59-.32-.71-.72-.71-.39 0-.71.12-.71.71s.32.89.71.89z"/></svg></span> <code>player.py</code></div>
+</div></p>
+</li>
+</ol>
+<h2 id="code-format">Code format</h2>
+<p>The <code>player.py</code> file should consist of the class <code>Player</code> as structured as follows:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Player</span><span class="p">():</span>
+  <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;testing player&quot;</span>
+  <span class="n">informed</span> <span class="o">=</span> <span class="kc">False</span>
+  <span class="n">group</span> <span class="o">=</span> <span class="s2">&quot;Children of Odin&quot;</span>
+  <span class="n">members</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s2">&quot;Thor&quot;</span><span class="p">,</span> <span class="s2">&quot;12834823&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;Loki&quot;</span><span class="p">,</span> <span class="s2">&quot;98854678&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;Hela&quot;</span><span class="p">,</span> <span class="s2">&quot;87654654&quot;</span><span class="p">]</span>
+  <span class="p">]</span>
+
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setup</span><span class="p">):</span>
+    <span class="o">...</span>
+
+  <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">problem</span><span class="p">):</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="n">solution</span><span class="p">,</span> <span class="n">search_tree</span>
+</code></pre></div>
+</td></tr></table>
+<h3 id="class-name">Class name</h3>
+<p>The name of the class must be <code>Player</code>.</p>
+<h3 id="agentplayer-information">Agent/player information</h3>
+<p>Name your agent/player using the class attribute <code>name</code> and define if the agent/player is using informed or uninformed search with the class attribute <code>informed</code>.</p>
+<div class="tabbed-set" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">For informed search</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>informed = True
+</code></pre></div>
+</td></tr></table>
+</div>
+<input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><label for="__tabbed_1_2">For uninformed search</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code>informed = False
+</code></pre></div>
+</td></tr></table>
+</div>
+</div>
+<h3 id="group-information">Group information</h3>
+<p>Include your group information as the class attributes for the <code>Player</code> class. This includes your group name (<code>group</code>) and group members (<code>members</code>).</p>
+<h3 id="__init__-function"><code>__init__()</code> function</h3>
+<p>The <code>__init__</code> function is the function to initiate the player. Apart from <code>self</code>, the function will also receive <code>setup</code> as an input parameter. The format of the <code>setup</code> is</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p">{</span>
+  <span class="n">maze_size</span><span class="p">:</span> <span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+  <span class="n">static_snake_length</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="p">}</span>
+</code></pre></div>
+</td></tr></table>
+<ol>
+<li><code>maze_size</code> is an array of length two. The first item is the number of rows and the second item is the number of columns of the maze.</li>
+<li><code>static_snake_length</code> is a boolean object to indicate if the snake length is static (<code>True</code>) or dynamic (<code>False</code>).</li>
+</ol>
+<h3 id="run-function"><code>run()</code> function</h3>
+<p>The <code>run</code> function is the function to implement the search algorithm. The function will take the input parameter of <code>problem</code>, which contains the current game state including the snake locations (<code>snake_locations</code>), current direction of the snake (<code>current_direction</code>), and the food locations (<code>food_locations</code>) in the following format:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p">{</span>
+  <span class="n">snake_locations</span><span class="p">:</span> <span class="p">[[</span><span class="nb">int</span><span class="p">,</span><span class="nb">int</span><span class="p">],[</span><span class="nb">int</span><span class="p">,</span><span class="nb">int</span><span class="p">],</span><span class="o">...</span><span class="p">],</span>
+  <span class="n">current_direction</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+  <span class="n">food_locations</span><span class="p">:</span> <span class="p">[[</span><span class="nb">int</span><span class="p">,</span><span class="nb">int</span><span class="p">],[</span><span class="nb">int</span><span class="p">,</span><span class="nb">int</span><span class="p">],</span><span class="o">...</span><span class="p">],</span>
+<span class="p">}</span>
+</code></pre></div>
+</td></tr></table>
+<ol>
+<li><code>snake_locations</code> is an array of the locations of the snake's body, starting from the head to the tail. The locations are given in the form of the coordinates <code>[x,y]</code>, i.e. <code>[column, row]</code>, with <code>[0,0]</code> at the top left corner of the maze. As an example, for a maze of 5 rows and 6 columns, the top right corner is <code>[5,0]</code>, the bottom left corner is <code>[0,4]</code>, and the bottom right corner is <code>[5,4]</code>.</li>
+<li><code>current_direction</code> is the current direction of the snake, specified as north <code>n</code>, south <code>s</code>, west <code>w</code>, or east <code>e</code>.</li>
+<li><code>food_locations</code> is an array of the locations of the food on the game field. The locations are specified in the form of coordinates identical to <code>snake_locations</code>.</li>
+</ol>
+<p>The <code>run</code> function is expected to return two variables, <code>solution</code> and <code>search_tree</code>.</p>
+<ol>
+<li><code>solution</code> is the series of actions for the snake from the current location to capture the food. The actions should be specified as north <code>n</code>, south <code>s</code>, west <code>w</code>, and east <code>e</code>. Each action will move the snake for 1 square in the specified direction.</li>
+<li>
+<p><code>search_tree</code> is the search tree that has been generated from the search algorithm the snake used to obtain the <code>solution</code>. <code>search_tree</code> should be a list of dictionary objects that gives us the information of each node in the search tree. Each object should be</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p">{</span>
+  <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;5,0,0&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;expansionsequence&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="s2">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">],</span>
+  <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;src2one&quot;</span><span class="p">,</span><span class="s2">&quot;src2two&quot;</span><span class="p">,</span><span class="s2">&quot;one2three&quot;</span><span class="p">],</span>
+  <span class="s2">&quot;removed&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+  <span class="s2">&quot;parent&quot;</span><span class="p">:</span> <span class="mi">1</span>
+<span class="p">},</span>
+</code></pre></div>
+</td></tr></table>
+<ul>
+<li><code>id</code> is the ID of this node, which should be unique for every node</li>
+<li><code>state</code> is the state of this node, which should be a string (the display format is not constrained)</li>
+<li><code>expansionsequence</code> is the order of this node being expanded</li>
+<li><code>children</code> is the ID of the nodes that are children to this node, which should be a list (empty list if no children)</li>
+<li><code>actions</code> is the list of actions that correspond to the children in children, which should be a list of equal length with children (the display format is not constrained)</li>
+<li><code>removed</code> indicates if this node has been removed due to being a duplicated node or creating a redundant path</li>
+<li><code>parent</code> is the ID of the node that is parent to this node</li>
+</ul>
+</li>
+</ol>
+<p>For example, to produce a search tree as follows,</p>
+<div style="text-align:center">
+<svg width="60%" viewBox="-5 -10 490 315"><style>.expseq { font: normal 10px sans-serif; }</style> <rect x="255" y="0" width="50" height="50" stroke="gray" fill="white"></rect> <text x="280" y="25" font-weight="thin" font-size="12px" dominant-baseline="middle" text-anchor="middle">0,0</text> <text x="317.5" y="25" font-weight="thin" dominant-baseline="middle" text-anchor="middle" class="expseq">1</text> <circle cx="317.5" cy="25" r="10" fill="none" stroke="#009688"></circle> <!----> <!----> <!----> <!----><rect x="105" y="100" width="50" height="50" stroke="gray" fill="white"></rect> <text x="130" y="125" font-weight="thin" font-size="12px" dominant-baseline="middle" text-anchor="middle">5,0</text> <text x="167.5" y="125" font-weight="thin" dominant-baseline="middle" text-anchor="middle" class="expseq">2</text> <circle cx="167.5" cy="125" r="10" fill="none" stroke="#009688"></circle> <!----> <!----> <line x1="280" y1="50" x2="130" y2="100" stroke="gray"></line> <text x="205" y="75" stroke="white" stroke-width=".5pt" font-weight="900" font-size="10px" dominant-baseline="middle" text-anchor="middle">n</text><rect x="305" y="100" width="50" height="50" stroke="gray" fill="white"></rect> <text x="330" y="125" font-weight="thin" font-size="12px" dominant-baseline="middle" text-anchor="middle">0,3</text> <!----> <!----> <!----> <!----> <line x1="280" y1="50" x2="330" y2="100" stroke="gray"></line> <text x="305" y="75" stroke="white" stroke-width=".5pt" font-weight="900" font-size="10px" dominant-baseline="middle" text-anchor="middle">w</text><rect x="405" y="100" width="50" height="50" stroke="gray" fill="white"></rect> <text x="430" y="125" font-weight="thin" font-size="12px" dominant-baseline="middle" text-anchor="middle">0,4</text> <!----> <!----> <!----> <!----> <line x1="280" y1="50" x2="430" y2="100" stroke="gray"></line> <text x="355" y="75" stroke="white" stroke-width=".5pt" font-weight="900" font-size="10px" dominant-baseline="middle" text-anchor="middle">e</text><rect x="5" y="200" width="50" height="50" stroke="gray" fill="white"></rect> <text x="30" y="225" font-weight="thin" font-size="12px" dominant-baseline="middle" text-anchor="middle">5,0</text> <!----> <!----> <line stroke="red" stroke-width="3" x1="0" y1="195" x2="60" y2="255"></line> <line stroke="red" stroke-width="3" x1="60" y1="195" x2="0" y2="255"></line> <line x1="130" y1="150" x2="30" y2="200" stroke="gray"></line> <text x="80" y="175" stroke="white" stroke-width=".5pt" font-weight="900" font-size="10px" dominant-baseline="middle" text-anchor="middle">n</text><rect x="105" y="200" width="50" height="50" stroke="gray" fill="white"></rect> <text x="130" y="225" font-weight="thin" font-size="12px" dominant-baseline="middle" text-anchor="middle">5,3</text> <!----> <!----> <!----> <!----> <line x1="130" y1="150" x2="130" y2="200" stroke="gray"></line> <text x="130" y="175" stroke="white" stroke-width=".5pt" font-weight="900" font-size="10px" dominant-baseline="middle" text-anchor="middle">s</text><rect x="205" y="200" width="50" height="50" stroke="gray" fill="white"></rect> <text x="230" y="225" font-weight="thin" font-size="12px" dominant-baseline="middle" text-anchor="middle">1,0</text> <!----> <!----> <!----> <!----> <line x1="130" y1="150" x2="230" y2="200" stroke="gray"></line> <text x="180" y="175" stroke="white" stroke-width=".5pt" font-weight="900" font-size="10px" dominant-baseline="middle" text-anchor="middle">w</text><!----> <!----> <!----> <!----> <!----> <!----> <!----> <!----><!----> <!----> <!----> <!----> <!----> <!----> <!----> <!----></svg>
+</div>
+
+<p>this is the value of the <code>search_tree</code>.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p">[</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;0,0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;expansionsequence&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span>
+    <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">,</span><span class="s2">&quot;w&quot;</span><span class="p">,</span><span class="s2">&quot;e&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;removed&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;parent&quot;</span><span class="p">:</span> <span class="kc">None</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;5,0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;expansionsequence&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;children&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">],</span>
+    <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">,</span><span class="s2">&quot;s&quot;</span><span class="p">,</span><span class="s2">&quot;w&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;removed&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;parent&quot;</span><span class="p">:</span> <span class="mi">1</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;0,3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;expansionsequence&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;children&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;removed&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;parent&quot;</span><span class="p">:</span> <span class="mi">1</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;0,4&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;expansionsequence&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;children&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;removed&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;parent&quot;</span><span class="p">:</span> <span class="mi">1</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;5,0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;expansionsequence&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;children&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;removed&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;parent&quot;</span><span class="p">:</span> <span class="mi">2</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;5,3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;expansionsequence&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;children&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;removed&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;parent&quot;</span><span class="p">:</span> <span class="mi">2</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+    <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;1,0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;expansionsequence&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;children&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;removed&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;parent&quot;</span><span class="p">:</span> <span class="mi">2</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div>
+</td></tr></table>
+<h2 id="disclaimer-on-the-testing-player-example">Disclaimer on the testing player example</h2>
+<p>An example of an/a agent/player named <code>testing player</code> is included under the subdirectory of <code>players &gt; tests</code>. <code>testing player</code> provides a structure to the <code>Player</code> class. The solutions generated by <code>testing player</code> are random and disregarding the current game state. The search trees returned by <code>testing player</code> are hardcoded and therefore static. Your agent/player should generate the solutions and search trees using a search algorithm.</p>
+<h2 id="interaction-between-this-platform-and-your-agent">Interaction between this platform and your agent</h2>
+<p>This section is to provide the information of how the game platform interacts with the agent/player. You only need to focus on the coding of the agent/player. </p>
+<p><svg width="100%" viewBox="-450 -30 900 400">
+  <text x="-100" y="0" text-anchor="end" dominant-baseline="middle">
+    <tspan style="font-weight:bolder">Game</tspan>
+    <tspan x="-100" y="40">Agent selected</tspan>
+    <tspan x="-100" dy="40">Notified of success initiation</tspan>
+    <tspan x="-100" dy="120">Next step</tspan>
+    <tspan x="-100" dy="120">Solution animation display</tspan>
+  </text>
+  <text x="100" y="0" text-anchor="start" dominant-baseline="middle">
+    <tspan style="font-weight:bolder">Agent/Player</tspan>
+    <tspan x="100" y="40" style="font-family:monospace">init</tspan>
+    <tspan x="100" y="200" style="font-family:monospace">run</tspan>
+  </text>
+  <path d="M -90 40 H 90 l -10 -5 l 3 5 l -3 5 l 10 -5" stroke="black" fill="black" />
+  <text style="font-size:smaller" x="0" y="30" text-anchor="middle" dominant-baseline="auto">with game settings</text>
+  <path d="M 115 50 V 80" stroke="black" />
+  <path d="M 115 80 H -90 l 10 5 l -3 -5 l 3 -5 l -10 5" stroke="black" fill="black" />
+  <path d="M -115 90 V 180 l 5 -10 l -5 3 l -5 -3 l 5 10" stroke="black" fill="black" />
+  <text style="font-size:smaller" x="-120" y="140" text-anchor="end" dominant-baseline="middle">if auto progression</text>
+  <path d="M -90 200 H 90 l -10 -5 l 3 5 l -3 5 l 10 -5" stroke="black" fill="black" />
+  <text style="font-size:smaller" x="0" y="190" text-anchor="middle" dominant-baseline="auto">with game states</text>
+  <path d="M 115 210 V 320" stroke="black" />
+  <path d="M 115 320 H -90 l 10 5 l -3 -5 l 3 -5 l -10 5" stroke="black" fill="black" />
+  <text style="font-size:smaller" x="0" y="310" text-anchor="middle" dominant-baseline="auto">solution, search_tree</text>
+  <path d="M -115 310 V 220 l 5 10 l -5 -3 l -5 3 l 5 -10" stroke="black" fill="black" />
+  <text style="font-size:smaller" x="-120" y="260" text-anchor="end" dominant-baseline="middle">if auto progression</text>
+  <text style="font-size:smaller" x="-250" y="200" text-anchor="end" dominant-baseline="middle">if step-by-step, click button</text>
+  <path d="M -240 200 h 50 l -10 -5 l 3 5 l -3 5 l 10 -5" stroke="black" fill="black" />
+  <rect stroke="teal" stroke-width="5" stroke-opacity="0.5" x="70" y="-20" fill="none" width="170" height="380" />
+</svg></p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../settings/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Game settings
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../submission/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Submission
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": ["toc.integrate", "navigation.expand"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../assets/javascripts/workers/search.fe42c31b.min.js", "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.7353b375.min.js"></script>
+      
+        <script src="../javascripts/config.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

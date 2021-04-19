@@ -3,7 +3,6 @@ import random
 class Player():
   name = "testing player"
   group = "Children of Odin"
-  icon = "mdi-cloud"
   members = [
     ["Thor", "12834823"],
     ["Loki", "98854678"],
