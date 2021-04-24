@@ -347,6 +347,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#unit-test-for-playerpy" class="md-nav__link">
+    Unit test for player.py
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -689,6 +696,21 @@
   <path d="M -240 200 h 50 l -10 -5 l 3 5 l -3 5 l 10 -5" stroke="black" fill="black" />
   <rect stroke="teal" stroke-width="5" stroke-opacity="0.5" x="70" y="-20" fill="none" width="170" height="380" />
 </svg></p>
+<h2 id="unit-test-for-playerpy">Unit test for <code>player.py</code></h2>
+<p>The following code is added to the end of <code>player.py</code> file for testing purpose. This provides an example of initiating and running the player. The availability of this code allows you to execute the <code>player.py</code> file directly using <code>python player.py</code> to test for any error before integrating with the UI.</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+  <span class="n">p1</span> <span class="o">=</span> <span class="n">Player</span><span class="p">({</span> <span class="s2">&quot;maze_size&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">],</span> <span class="s2">&quot;static_snake_length&quot;</span><span class="p">:</span> <span class="kc">True</span> <span class="p">})</span>
+  <span class="n">sol</span><span class="p">,</span> <span class="n">st</span> <span class="o">=</span> <span class="n">p1</span><span class="o">.</span><span class="n">run</span><span class="p">({</span><span class="s1">&#39;snake_locations&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">]],</span> <span class="s1">&#39;current_direction&#39;</span><span class="p">:</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;food_locations&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]]})</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Solution is:&quot;</span><span class="p">,</span> <span class="n">sol</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Search tree is:&quot;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+</code></pre></div>
+</td></tr></table>
                 
               
               
