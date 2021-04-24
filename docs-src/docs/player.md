@@ -229,3 +229,16 @@ This section is to provide the information of how the game platform interacts wi
   <path d="M -240 200 h 50 l -10 -5 l 3 5 l -3 5 l 10 -5" stroke="black" fill="black" />
   <rect stroke="teal" stroke-width="5" stroke-opacity="0.5" x="70" y="-20" fill="none" width="170" height="380" />
 </svg>
+
+## Unit test for `player.py`
+
+The following code is added to the end of `player.py` file for testing purpose. This provides an example of initiating and running the player. The availability of this code allows you to execute the `player.py` file directly using `python player.py` to test for any error before integrating with the UI.
+
+```py
+if __name__ == "__main__":
+  p1 = Player({ "maze_size": [10,10], "static_snake_length": True })
+  sol, st = p1.run({'snake_locations': [[0, 5]], 'current_direction': 'e', 'food_locations': [[6, 7]]})
+  print("Solution is:", sol)
+  print("Search tree is:")
+  print(st)
+```
