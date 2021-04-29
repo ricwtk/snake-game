@@ -540,7 +540,7 @@ var vm = new Vue({
             clearInterval(this.controls.animation.id); 
             this.controls.animation.id = null;
             if (!this.controls.stepping) {
-              this.nextAgentStep();
+              this.$nextTick(() => {this.nextAgentStep();});
             }
           }
         }
