@@ -78,8 +78,7 @@ def initPlayer(initiated_player, init_param):
     initiated_player.update({ "err": sys.exc_info() })
   return initiated_player
 
-@app.get("/get-player-list")
-async def getPlayerList():
+def getPlayerList():
   global players
   players = [ loadPlayer(f) 
     for f in os.listdir(players_dir) 
@@ -87,9 +86,13 @@ async def getPlayerList():
     and os.path.isdir( os.path.join(players_dir, f) ) 
   ]
   player_list = [ retrievePlayerDetails(p) for p in players ]
+  return player_list
+
+@app.get("/get-player-list")
+async def getPlayerListServe():
   return JSONResponse(content={
     "name": "player list",
-    "content": player_list
+    "content": getPlayerList()
   })
 
 @app.websocket_route("/select-player/{folder_name}")
